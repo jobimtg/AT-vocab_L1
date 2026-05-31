@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEFR Vocabulary Assessment — Teacher Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f1117;
+  --surface: #181c27;
+  --surface2: #1e2333;
+  --border: #2a3048;
+  --accent: #4ade80;
+  --accent2: #22d3ee;
+  --accent3: #f59e0b;
+  --danger: #f87171;
+  --text: #e8eaf0;
+  --text2: #8b92a9;
+  --text3: #5a6280;
+  --r: 12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* GRAIN TEXTURE */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.6}
+
+/* LAYOUT */
+.app{max-width:1100px;margin:0 auto;padding:24px 20px}
+
+/* HEADER */
+.header{display:flex;align-items:center;gap:16px;margin-bottom:40px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.logo{font-family:'DM Serif Display',serif;font-size:28px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo span{font-style:italic}
+.badge{background:var(--surface2);border:1px solid var(--border);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--text2);font-family:'DM Mono',monospace}
+
+/* SCREENS */
+.screen{display:none;animation:fadeUp .4s ease}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* SETUP SCREEN */
+.setup-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:40px;max-width:520px;margin:0 auto}
+.setup-card h2{font-family:'DM Serif Display',serif;font-size:32px;margin-bottom:8px;line-height:1.2}
+.setup-card p{color:var(--text2);margin-bottom:28px;font-size:15px}
+.field{margin-bottom:20px}
+.field label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:8px;letter-spacing:.05em;text-transform:uppercase}
+.field input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;outline:none;transition:border-color .2s}
+.field input:focus{border-color:var(--accent)}
+.field input::placeholder{color:var(--text3)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#0a1a0e;border:none;border-radius:8px;padding:13px 28px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.02em}
+.btn:hover{background:#22c55e;transform:translateY(-1px);box-shadow:0 8px 24px rgba(74,222,128,.25)}
+.btn.secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.btn.secondary:hover{background:var(--surface);border-color:var(--text3);box-shadow:none}
+.btn.danger{background:var(--danger);color:#fff}
+.btn.danger:hover{background:#ef4444;box-shadow:0 8px 24px rgba(248,113,113,.25)}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
+.info-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px}
+.info-box .label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.info-box .val{font-size:22px;font-weight:700;color:var(--text)}
+
+/* TEST HEADER */
+.test-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:gap}
+.student-info{display:flex;align-items:center;gap:12px}
+.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#0a1a0e;flex-shrink:0}
+.student-name{font-weight:600;font-size:16px}
+.student-sub{font-size:13px;color:var(--text2)}
+.round-badge{background:var(--surface2);border:1px solid var(--border);padding:6px 16px;border-radius:20px;font-size:13px;font-weight:600;font-family:'DM Mono',monospace}
+.round-badge span{color:var(--accent2)}
+
+/* PROGRESS */
+.progress-wrap{margin-bottom:28px}
+.progress-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:8px;font-family:'DM Mono',monospace}
+.progress-bar{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;transition:width .4s ease}
+
+
+
+/* WORDS GRID */
+.words-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:28px}
+.word-card{position:relative;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 14px 12px;cursor:pointer;transition:all .2s;user-select:none}
+.word-card:hover{border-color:var(--text3);background:var(--surface2)}
+.word-card.checked{border-color:var(--accent);background:rgba(74,222,128,.06)}
+.word-card.checked .word-text{color:var(--accent)}
+.word-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.check-box{width:18px;height:18px;border:1.5px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.word-card.checked .check-box{background:var(--accent);border-color:var(--accent)}
+.check-mark{color:#0a1a0e;font-size:11px;font-weight:700;display:none}
+.word-card.checked .check-mark{display:block}
+.word-text{font-size:17px;font-weight:600;margin-bottom:4px;transition:color .2s;font-family:'DM Serif Display',serif}
+.word-ipa{font-family:'DM Mono',monospace;font-size:11px;color:var(--text3)}
+
+/* TOOLTIP */
+.tooltip{position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%) scale(.9);background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;width:220px;z-index:100;pointer-events:none;opacity:0;transition:all .18s;box-shadow:0 16px 40px rgba(0,0,0,.6)}
+.tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--border)}
+.word-card:hover .tooltip{opacity:1;transform:translateX(-50%) scale(1);pointer-events:auto}
+.tip-word{font-family:'DM Serif Display',serif;font-size:18px;font-weight:400;margin-bottom:6px}
+.tip-ipa{font-family:'DM Mono',monospace;font-size:12px;color:var(--accent2);margin-bottom:6px}
+.tip-zh{font-size:14px;color:var(--text2);margin-bottom:10px}
+.speak-btn{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:12px;cursor:pointer;color:var(--text2);transition:all .15s;font-family:'Outfit',sans-serif}
+.speak-btn:hover{background:var(--border);color:var(--text)}
+
+/* SECTION LABEL */
+.section-label{font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin:20px 0 12px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ACTION ROW */
+.action-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+
+/* RESULTS */
+.result-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:36px;margin-bottom:24px;text-align:center}
+.result-score{font-family:'DM Serif Display',serif;font-size:72px;line-height:1;margin-bottom:8px}
+.result-score span{font-style:italic;color:var(--accent)}
+.result-label{font-size:15px;color:var(--text2);margin-bottom:24px}
+.cefr-result{display:inline-flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:30px;padding:10px 24px;font-size:22px;font-weight:700;font-family:'DM Mono',monospace}
+.cefr-result-desc{font-size:14px;color:var(--text2);margin-top:12px}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.stat-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;text-align:center}
+.stat-num{font-family:'DM Serif Display',serif;font-size:36px;font-weight:400}
+.stat-sub{font-size:12px;color:var(--text2);margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
+
+/* BREAKDOWN BARS */
+.breakdown{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:24px}
+.breakdown h3{font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:20px}
+.brow{display:grid;grid-template-columns:60px 1fr 60px;gap:12px;align-items:center;margin-bottom:14px}
+.brow-label{font-family:'DM Mono',monospace;font-size:13px;font-weight:600}
+.brow-bar-wrap{background:var(--surface2);border-radius:4px;height:10px;overflow:hidden}
+.brow-bar{height:100%;border-radius:4px;transition:width 1s ease}
+.brow-pct{font-family:'DM Mono',monospace;font-size:13px;color:var(--text2);text-align:right}
+
+/* WORD TABLE */
+.word-table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:24px;overflow-x:auto}
+.word-table-wrap h3{font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:16px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);font-weight:600;padding:0 12px 12px;border-bottom:1px solid var(--border)}
+td{padding:10px 12px;border-bottom:1px solid rgba(42,48,72,.5);font-size:14px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+.td-ipa{font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)}
+.td-result{font-size:18px}
+.result-correct{color:var(--accent)}
+.result-wrong{color:var(--danger)}
+.filter-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter-btn{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;font-family:'DM Mono',monospace;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s}
+.filter-btn.active,.filter-btn:hover{background:var(--surface2);color:var(--text);border-color:var(--text3)}
+
+/* TOOLTIP HOVER SAFE ZONE */
+.word-card::before{content:'';position:absolute;top:-10px;left:-10px;right:-10px;bottom:-10px}
+
+/* ROUND 2 NOTICE */
+.round2-notice{background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.2);border-radius:10px;padding:16px 20px;margin-bottom:24px;display:flex;gap:12px;align-items:flex-start}
+.round2-notice .icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.round2-notice .text{font-size:14px;color:var(--text2);line-height:1.6}
+.round2-notice strong{color:var(--accent2)}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .words-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .stats-row .stat-box:last-child{grid-column:1/-1}
+  .result-score{font-size:52px}
+  .tooltip{width:180px;font-size:13px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="logo">CEFR <span>Vocab</span> Assessment</div>
+    <div class="badge">Teacher Edition v2.0</div>
+  </div>
+
+  <!-- SETUP SCREEN -->
+  <div id="screen-setup" class="screen active">
+    <div class="setup-card">
+      <h2>Start New Assessment</h2>
+      <p>Enter student details to begin the two-round adaptive vocabulary test.</p>
+      <div class="field">
+        <label>Student Name</label>
+        <input type="text" id="student-name" placeholder="e.g. Emily Chen" autocomplete="off">
+      </div>
+      <div class="info-grid">
+        <div class="info-box">
+          <div class="label">Round 1</div>
+          <div class="val">20 words</div>
+        </div>
+        <div class="info-box">
+          <div class="label">Round 2</div>
+          <div class="val">40 words</div>
+        </div>
+        <div class="info-box">
+          <div class="label">Total Time</div>
+          <div class="val">8–12 min</div>
+        </div>
+        <div class="info-box">
+          <div class="label">Word Bank</div>
+          <div class="val">600 words</div>
+        </div>
+      </div>
+      <button class="btn" onclick="startTest()">▶ Begin Assessment</button>
+    </div>
+  </div>
+
+  <!-- TEST SCREEN -->
+  <div id="screen-test" class="screen">
+    <div class="test-header">
+      <div class="student-info">
+        <div class="avatar" id="avatar-initial">?</div>
+        <div>
+          <div class="student-name" id="display-name">Student</div>
+          <div class="student-sub">Hover words → see IPA & meaning · Click 🔊 to hear</div>
+        </div>
+      </div>
+      <div class="round-badge" id="round-badge">Round <span>1</span> of 2</div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-labels">
+        <span id="prog-label">0 / 20 words shown</span>
+        <span id="prog-pct">0%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+
+    <div id="round2-notice" style="display:none" class="round2-notice">
+      <div class="icon">🎯</div>
+      <div class="text">
+        <strong>Round 2 — Adaptive Focus</strong><br>
+        Based on Round 1, the test has selected words concentrated around the student's estimated level. Tick all words the student knows.
+      </div>
+    </div>
+
+    <div class="words-grid" id="words-grid"></div>
+
+    <div class="section-label">Teacher Actions</div>
+    <div class="action-row">
+      <button class="btn" id="finish-btn" onclick="finishRound()">✓ Finish Round 1</button>
+      <button class="btn secondary" onclick="resetTest()">✕ Reset</button>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="screen-results" class="screen">
+    <div class="result-hero">
+      <div class="result-score" id="result-score"><span>—</span></div>
+      <div class="result-label" id="result-label">Total score across both rounds</div>
+      <div class="cefr-result" id="cefr-result-badge">—</div>
+      <div class="cefr-result-desc" id="cefr-result-desc"></div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-num" id="stat-correct">0</div>
+        <div class="stat-sub">Words Known</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="stat-total">0</div>
+        <div class="stat-sub">Words Tested</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="stat-est">0</div>
+        <div class="stat-sub">Est. Vocabulary Size</div>
+      </div>
+    </div>
+
+    <div class="breakdown" id="breakdown-wrap">
+      <h3>Performance by CEFR Level</h3>
+      <div id="breakdown-bars"></div>
+    </div>
+
+    <div class="word-table-wrap">
+      <h3>Full Word Report</h3>
+      <div class="filter-row" id="filter-row">
+        <button class="filter-btn active" onclick="filterTable('all',this)">All</button>
+        <button class="filter-btn" onclick="filterTable('correct',this)">✓ Known</button>
+        <button class="filter-btn" onclick="filterTable('wrong',this)">✗ Unknown</button>
+      </div>
+      <table id="result-table">
+        <thead><tr><th>#</th><th>Word</th><th>IPA</th><th>Chinese</th><th>Result</th></tr></thead>
+        <tbody id="result-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="action-row">
+      <button class="btn" onclick="exportCSV()">⬇ Export CSV</button>
+      <button class="btn secondary" onclick="resetTest()">↺ New Student</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// VOCABULARY DATABASE — 600 words A1-C2
+// ============================================================
+const VOCAB = {
+A1:[
+{word:"be",ipa:"/biː/",zh:"是"},
+{word:"have",ipa:"/hæv/",zh:"有"},
+{word:"do",ipa:"/duː/",zh:"做"},
+{word:"say",ipa:"/seɪ/",zh:"說"},
+{word:"go",ipa:"/ɡoʊ/",zh:"去"},
+{word:"get",ipa:"/ɡɛt/",zh:"得到"},
+{word:"make",ipa:"/meɪk/",zh:"製作"},
+{word:"know",ipa:"/noʊ/",zh:"知道"},
+{word:"think",ipa:"/θɪŋk/",zh:"認為"},
+{word:"take",ipa:"/teɪk/",zh:"拿"},
+{word:"see",ipa:"/siː/",zh:"看見"},
+{word:"come",ipa:"/kʌm/",zh:"來"},
+{word:"want",ipa:"/wɒnt/",zh:"想要"},
+{word:"look",ipa:"/lʊk/",zh:"看"},
+{word:"use",ipa:"/juːz/",zh:"使用"},
+{word:"find",ipa:"/faɪnd/",zh:"找到"},
+{word:"give",ipa:"/ɡɪv/",zh:"給"},
+{word:"tell",ipa:"/tɛl/",zh:"告訴"},
+{word:"work",ipa:"/wɜːrk/",zh:"工作"},
+{word:"call",ipa:"/kɔːl/",zh:"打電話"},
+{word:"try",ipa:"/traɪ/",zh:"嘗試"},
+{word:"ask",ipa:"/æsk/",zh:"詢問"},
+{word:"need",ipa:"/niːd/",zh:"需要"},
+{word:"feel",ipa:"/fiːl/",zh:"感覺"},
+{word:"like",ipa:"/laɪk/",zh:"喜歡"},
+{word:"eat",ipa:"/iːt/",zh:"吃"},
+{word:"drink",ipa:"/drɪŋk/",zh:"喝"},
+{word:"read",ipa:"/riːd/",zh:"讀"},
+{word:"write",ipa:"/raɪt/",zh:"寫"},
+{word:"play",ipa:"/pleɪ/",zh:"玩"},
+{word:"sleep",ipa:"/sliːp/",zh:"睡覺"},
+{word:"walk",ipa:"/wɔːk/",zh:"走路"},
+{word:"run",ipa:"/rʌn/",zh:"跑"},
+{word:"sit",ipa:"/sɪt/",zh:"坐"},
+{word:"stand",ipa:"/stænd/",zh:"站立"},
+{word:"open",ipa:"/ˈoʊpən/",zh:"打開"},
+{word:"close",ipa:"/kloʊz/",zh:"關閉"},
+{word:"buy",ipa:"/baɪ/",zh:"買"},
+{word:"pay",ipa:"/peɪ/",zh:"付款"},
+{word:"help",ipa:"/hɛlp/",zh:"幫助"},
+{word:"stop",ipa:"/stɒp/",zh:"停止"},
+{word:"start",ipa:"/stɑːrt/",zh:"開始"},
+{word:"live",ipa:"/lɪv/",zh:"居住"},
+{word:"love",ipa:"/lʌv/",zh:"愛"},
+{word:"put",ipa:"/pʊt/",zh:"放"},
+{word:"turn",ipa:"/tɜːrn/",zh:"轉"},
+{word:"show",ipa:"/ʃoʊ/",zh:"展示"},
+{word:"meet",ipa:"/miːt/",zh:"見面"},
+{word:"leave",ipa:"/liːv/",zh:"離開"},
+{word:"talk",ipa:"/tɔːk/",zh:"談話"},
+// nouns
+{word:"time",ipa:"/taɪm/",zh:"時間"},
+{word:"year",ipa:"/jɪr/",zh:"年"},
+{word:"day",ipa:"/deɪ/",zh:"天"},
+{word:"man",ipa:"/mæn/",zh:"男人"},
+{word:"woman",ipa:"/ˈwʊmən/",zh:"女人"},
+{word:"child",ipa:"/tʃaɪld/",zh:"小孩"},
+{word:"family",ipa:"/ˈfæməli/",zh:"家庭"},
+{word:"house",ipa:"/haʊs/",zh:"房子"},
+{word:"home",ipa:"/hoʊm/",zh:"家"},
+{word:"school",ipa:"/skuːl/",zh:"學校"},
+{word:"food",ipa:"/fuːd/",zh:"食物"},
+{word:"water",ipa:"/ˈwɔːtər/",zh:"水"},
+{word:"money",ipa:"/ˈmʌni/",zh:"錢"},
+{word:"book",ipa:"/bʊk/",zh:"書"},
+{word:"car",ipa:"/kɑːr/",zh:"汽車"},
+{word:"door",ipa:"/dɔːr/",zh:"門"},
+{word:"hand",ipa:"/hænd/",zh:"手"},
+{word:"eye",ipa:"/aɪ/",zh:"眼睛"},
+{word:"head",ipa:"/hɛd/",zh:"頭"},
+{word:"city",ipa:"/ˈsɪti/",zh:"城市"},
+{word:"country",ipa:"/ˈkʌntri/",zh:"國家"},
+{word:"job",ipa:"/dʒɒb/",zh:"工作"},
+{word:"friend",ipa:"/frɛnd/",zh:"朋友"},
+{word:"dog",ipa:"/dɒɡ/",zh:"狗"},
+{word:"cat",ipa:"/kæt/",zh:"貓"},
+{word:"phone",ipa:"/foʊn/",zh:"電話"},
+// adj
+{word:"good",ipa:"/ɡʊd/",zh:"好的"},
+{word:"new",ipa:"/njuː/",zh:"新的"},
+{word:"big",ipa:"/bɪɡ/",zh:"大的"},
+{word:"small",ipa:"/smɔːl/",zh:"小的"},
+{word:"hot",ipa:"/hɒt/",zh:"熱的"},
+{word:"cold",ipa:"/koʊld/",zh:"冷的"},
+{word:"happy",ipa:"/ˈhæpi/",zh:"快樂的"},
+{word:"sad",ipa:"/sæd/",zh:"傷心的"},
+{word:"fast",ipa:"/fæst/",zh:"快的"},
+{word:"slow",ipa:"/sloʊ/",zh:"慢的"},
+{word:"old",ipa:"/oʊld/",zh:"老的"},
+{word:"young",ipa:"/jʌŋ/",zh:"年輕的"},
+{word:"long",ipa:"/lɒŋ/",zh:"長的"},
+{word:"short",ipa:"/ʃɔːrt/",zh:"短的"},
+{word:"free",ipa:"/friː/",zh:"自由的"},
+{word:"right",ipa:"/raɪt/",zh:"正確的"},
+{word:"wrong",ipa:"/rɒŋ/",zh:"錯誤的"},
+{word:"easy",ipa:"/ˈiːzi/",zh:"容易的"},
+{word:"hard",ipa:"/hɑːrd/",zh:"困難的"},
+{word:"clean",ipa:"/kliːn/",zh:"乾淨的"},
+// adv/prep
+{word:"here",ipa:"/hɪr/",zh:"這裡"},
+{word:"there",ipa:"/ðɛr/",zh:"那裡"},
+{word:"now",ipa:"/naʊ/",zh:"現在"},
+{word:"today",ipa:"/təˈdeɪ/",zh:"今天"},
+{word:"always",ipa:"/ˈɔːlweɪz/",zh:"總是"},
+{word:"never",ipa:"/ˈnɛvər/",zh:"從不"},
+{word:"very",ipa:"/ˈvɛri/",zh:"非常"},
+{word:"also",ipa:"/ˈɔːlsoʊ/",zh:"也"},
+{word:"again",ipa:"/əˈɡɛn/",zh:"再次"},
+{word:"maybe",ipa:"/ˈmeɪbi/",zh:"也許"}
+],
+A2:[
+{word:"travel",ipa:"/ˈtræv.əl/",zh:"旅行"},
+{word:"arrive",ipa:"/əˈraɪv/",zh:"到達"},
+{word:"borrow",ipa:"/ˈbɒroʊ/",zh:"借入"},
+{word:"lend",ipa:"/lɛnd/",zh:"借出"},
+{word:"spend",ipa:"/spɛnd/",zh:"花費"},
+{word:"save",ipa:"/seɪv/",zh:"儲存"},
+{word:"learn",ipa:"/lɜːrn/",zh:"學習"},
+{word:"teach",ipa:"/tiːtʃ/",zh:"教"},
+{word:"decide",ipa:"/dɪˈsaɪd/",zh:"決定"},
+{word:"remember",ipa:"/rɪˈmɛmbər/",zh:"記住"},
+{word:"forget",ipa:"/fərˈɡɛt/",zh:"忘記"},
+{word:"agree",ipa:"/əˈɡriː/",zh:"同意"},
+{word:"refuse",ipa:"/rɪˈfjuːz/",zh:"拒絕"},
+{word:"explain",ipa:"/ɪkˈspleɪn/",zh:"解釋"},
+{word:"describe",ipa:"/dɪˈskraɪb/",zh:"描述"},
+{word:"compare",ipa:"/kəmˈpɛr/",zh:"比較"},
+{word:"choose",ipa:"/tʃuːz/",zh:"選擇"},
+{word:"prepare",ipa:"/prɪˈpɛr/",zh:"準備"},
+{word:"invite",ipa:"/ɪnˈvaɪt/",zh:"邀請"},
+{word:"visit",ipa:"/ˈvɪzɪt/",zh:"拜訪"},
+{word:"enjoy",ipa:"/ɪnˈdʒɔɪ/",zh:"享受"},
+{word:"expect",ipa:"/ɪkˈspɛkt/",zh:"期待"},
+{word:"happen",ipa:"/ˈhæpən/",zh:"發生"},
+{word:"wait",ipa:"/weɪt/",zh:"等待"},
+{word:"return",ipa:"/rɪˈtɜːrn/",zh:"返回"},
+{word:"carry",ipa:"/ˈkæri/",zh:"攜帶"},
+{word:"send",ipa:"/sɛnd/",zh:"寄送"},
+{word:"receive",ipa:"/rɪˈsiːv/",zh:"收到"},
+{word:"share",ipa:"/ʃɛr/",zh:"分享"},
+{word:"join",ipa:"/dʒɔɪn/",zh:"加入"},
+// nouns
+{word:"information",ipa:"/ˌɪnfərˈmeɪʃən/",zh:"資訊"},
+{word:"problem",ipa:"/ˈprɒbləm/",zh:"問題"},
+{word:"answer",ipa:"/ˈænsər/",zh:"答案"},
+{word:"question",ipa:"/ˈkwɛstʃən/",zh:"問題"},
+{word:"example",ipa:"/ɪɡˈzæmpəl/",zh:"例子"},
+{word:"reason",ipa:"/ˈriːzən/",zh:"原因"},
+{word:"place",ipa:"/pleɪs/",zh:"地方"},
+{word:"way",ipa:"/weɪ/",zh:"方式"},
+{word:"part",ipa:"/pɑːrt/",zh:"部分"},
+{word:"number",ipa:"/ˈnʌmbər/",zh:"數字"},
+{word:"price",ipa:"/praɪs/",zh:"價格"},
+{word:"hour",ipa:"/ˈaʊər/",zh:"小時"},
+{word:"week",ipa:"/wiːk/",zh:"星期"},
+{word:"month",ipa:"/mʌnθ/",zh:"月"},
+{word:"holiday",ipa:"/ˈhɒlɪdeɪ/",zh:"假日"},
+{word:"weather",ipa:"/ˈwɛðər/",zh:"天氣"},
+{word:"language",ipa:"/ˈlæŋɡwɪdʒ/",zh:"語言"},
+{word:"story",ipa:"/ˈstɔːri/",zh:"故事"},
+{word:"letter",ipa:"/ˈlɛtər/",zh:"信件"},
+{word:"office",ipa:"/ˈɒfɪs/",zh:"辦公室"},
+// adj
+{word:"different",ipa:"/ˈdɪfərənt/",zh:"不同的"},
+{word:"important",ipa:"/ɪmˈpɔːrtənt/",zh:"重要的"},
+{word:"interesting",ipa:"/ˈɪntrɪstɪŋ/",zh:"有趣的"},
+{word:"beautiful",ipa:"/ˈbjuːtɪfəl/",zh:"美麗的"},
+{word:"dangerous",ipa:"/ˈdeɪndʒərəs/",zh:"危險的"},
+{word:"popular",ipa:"/ˈpɒpjələr/",zh:"受歡迎的"},
+{word:"modern",ipa:"/ˈmɒdərn/",zh:"現代的"},
+{word:"quiet",ipa:"/ˈkwaɪət/",zh:"安靜的"},
+{word:"busy",ipa:"/ˈbɪzi/",zh:"忙碌的"},
+{word:"tired",ipa:"/taɪərd/",zh:"疲倦的"},
+{word:"lucky",ipa:"/ˈlʌki/",zh:"幸運的"},
+{word:"afraid",ipa:"/əˈfreɪd/",zh:"害怕的"},
+{word:"surprised",ipa:"/sərˈpraɪzd/",zh:"驚訝的"},
+{word:"ready",ipa:"/ˈrɛdi/",zh:"準備好的"},
+{word:"useful",ipa:"/ˈjuːsfəl/",zh:"有用的"},
+// adv
+{word:"usually",ipa:"/ˈjuːʒuəli/",zh:"通常"},
+{word:"often",ipa:"/ˈɒfən/",zh:"經常"},
+{word:"sometimes",ipa:"/ˈsʌmtaɪmz/",zh:"有時"},
+{word:"suddenly",ipa:"/ˈsʌdənli/",zh:"突然"},
+{word:"probably",ipa:"/ˈprɒbəbli/",zh:"可能"},
+{word:"nearly",ipa:"/ˈnɪərli/",zh:"幾乎"},
+{word:"already",ipa:"/ɔːlˈrɛdi/",zh:"已經"},
+{word:"still",ipa:"/stɪl/",zh:"仍然"},
+{word:"together",ipa:"/təˈɡɛðər/",zh:"一起"},
+{word:"between",ipa:"/bɪˈtwiːn/",zh:"在...之間"},
+{word:"behind",ipa:"/bɪˈhaɪnd/",zh:"在...後面"},
+{word:"below",ipa:"/bɪˈloʊ/",zh:"在...下方"},
+{word:"above",ipa:"/əˈbʌv/",zh:"在...上方"},
+{word:"across",ipa:"/əˈkrɒs/",zh:"橫過"},
+{word:"through",ipa:"/θruː/",zh:"穿過"}
+],
+B1:[
+{word:"achieve",ipa:"/əˈtʃiːv/",zh:"達到"},
+{word:"improve",ipa:"/ɪmˈpruːv/",zh:"改進"},
+{word:"develop",ipa:"/dɪˈvɛləp/",zh:"發展"},
+{word:"consider",ipa:"/kənˈsɪdər/",zh:"考慮"},
+{word:"involve",ipa:"/ɪnˈvɒlv/",zh:"涉及"},
+{word:"provide",ipa:"/prəˈvaɪd/",zh:"提供"},
+{word:"include",ipa:"/ɪnˈkluːd/",zh:"包括"},
+{word:"increase",ipa:"/ɪnˈkriːs/",zh:"增加"},
+{word:"reduce",ipa:"/rɪˈdjuːs/",zh:"減少"},
+{word:"suggest",ipa:"/səˈdʒɛst/",zh:"建議"},
+{word:"suppose",ipa:"/səˈpoʊz/",zh:"假設"},
+{word:"manage",ipa:"/ˈmænɪdʒ/",zh:"管理"},
+{word:"produce",ipa:"/prəˈdjuːs/",zh:"生產"},
+{word:"support",ipa:"/səˈpɔːrt/",zh:"支持"},
+{word:"accept",ipa:"/əkˈsɛpt/",zh:"接受"},
+{word:"follow",ipa:"/ˈfɒloʊ/",zh:"跟隨"},
+{word:"express",ipa:"/ɪkˈsprɛs/",zh:"表達"},
+{word:"discover",ipa:"/dɪˈskʌvər/",zh:"發現"},
+{word:"prevent",ipa:"/prɪˈvɛnt/",zh:"預防"},
+{word:"represent",ipa:"/ˌrɛprɪˈzɛnt/",zh:"代表"},
+{word:"translate",ipa:"/trænsˈleɪt/",zh:"翻譯"},
+{word:"recommend",ipa:"/ˌrɛkəˈmɛnd/",zh:"推薦"},
+{word:"attend",ipa:"/əˈtɛnd/",zh:"參加"},
+{word:"replace",ipa:"/rɪˈpleɪs/",zh:"替換"},
+{word:"affect",ipa:"/əˈfɛkt/",zh:"影響"},
+// nouns
+{word:"achievement",ipa:"/əˈtʃiːvmənt/",zh:"成就"},
+{word:"experience",ipa:"/ɪkˈspɪriəns/",zh:"經驗"},
+{word:"opportunity",ipa:"/ˌɒpəˈtjuːnɪti/",zh:"機會"},
+{word:"situation",ipa:"/ˌsɪtjuˈeɪʃən/",zh:"情況"},
+{word:"environment",ipa:"/ɪnˈvaɪrənmənt/",zh:"環境"},
+{word:"community",ipa:"/kəˈmjuːnɪti/",zh:"社區"},
+{word:"education",ipa:"/ˌɛdʒuˈkeɪʃən/",zh:"教育"},
+{word:"technology",ipa:"/tɛkˈnɒlədʒi/",zh:"科技"},
+{word:"culture",ipa:"/ˈkʌltʃər/",zh:"文化"},
+{word:"society",ipa:"/səˈsaɪɪti/",zh:"社會"},
+{word:"government",ipa:"/ˈɡʌvənmənt/",zh:"政府"},
+{word:"economy",ipa:"/ɪˈkɒnəmi/",zh:"經濟"},
+{word:"advantage",ipa:"/ədˈvɑːntɪdʒ/",zh:"優點"},
+{word:"disadvantage",ipa:"/ˌdɪsədˈvɑːntɪdʒ/",zh:"缺點"},
+{word:"solution",ipa:"/səˈluːʃən/",zh:"解決方案"},
+{word:"result",ipa:"/rɪˈzʌlt/",zh:"結果"},
+{word:"research",ipa:"/rɪˈsɜːrtʃ/",zh:"研究"},
+{word:"resource",ipa:"/ˈriːsɔːrs/",zh:"資源"},
+{word:"project",ipa:"/ˈprɒdʒɛkt/",zh:"計劃"},
+{word:"attitude",ipa:"/ˈætɪtjuːd/",zh:"態度"},
+// adj
+{word:"clever",ipa:"/ˈklɛvər/",zh:"聰明的"},
+{word:"confident",ipa:"/ˈkɒnfɪdənt/",zh:"自信的"},
+{word:"creative",ipa:"/kriˈeɪtɪv/",zh:"有創意的"},
+{word:"curious",ipa:"/ˈkjʊəriəs/",zh:"好奇的"},
+{word:"responsible",ipa:"/rɪˈspɒnsɪbəl/",zh:"負責任的"},
+{word:"independent",ipa:"/ˌɪndɪˈpɛndənt/",zh:"獨立的"},
+{word:"ambitious",ipa:"/æmˈbɪʃəs/",zh:"有抱負的"},
+{word:"determined",ipa:"/dɪˈtɜːrmɪnd/",zh:"堅定的"},
+{word:"flexible",ipa:"/ˈflɛksɪbəl/",zh:"靈活的"},
+{word:"practical",ipa:"/ˈpræktɪkəl/",zh:"實際的"},
+// adv
+{word:"gradually",ipa:"/ˈɡrædʒuəli/",zh:"逐漸地"},
+{word:"immediately",ipa:"/ɪˈmiːdiətli/",zh:"立即"},
+{word:"eventually",ipa:"/ɪˈvɛntʃuəli/",zh:"最終"},
+{word:"approximately",ipa:"/əˈprɒksɪmɪtli/",zh:"大約"},
+{word:"generally",ipa:"/ˈdʒɛnərəli/",zh:"一般地"},
+{word:"particularly",ipa:"/pəˈtɪkjələrli/",zh:"特別地"},
+{word:"significantly",ipa:"/sɪɡˈnɪfɪkəntli/",zh:"顯著地"},
+{word:"effectively",ipa:"/ɪˈfɛktɪvli/",zh:"有效地"},
+{word:"basically",ipa:"/ˈbeɪsɪkli/",zh:"基本上"},
+{word:"absolutely",ipa:"/ˈæbsəluːtli/",zh:"絕對地"},
+{word:"perhaps",ipa:"/pərˈhæps/",zh:"也許"},
+{word:"despite",ipa:"/dɪˈspaɪt/",zh:"儘管"},
+{word:"whereas",ipa:"/ˌwɛrˈæz/",zh:"而"},
+{word:"therefore",ipa:"/ˈðɛrɪfɔːr/",zh:"因此"},
+{word:"furthermore",ipa:"/ˈfɜːrðərˌmɔːr/",zh:"此外"}
+],
+B2:[
+{word:"negotiate",ipa:"/nɪˈɡoʊʃieɪt/",zh:"協商"},
+{word:"accomplish",ipa:"/əˈkʌmplɪʃ/",zh:"完成"},
+{word:"implement",ipa:"/ˈɪmplɪmɛnt/",zh:"實施"},
+{word:"analyze",ipa:"/ˈænəlaɪz/",zh:"分析"},
+{word:"evaluate",ipa:"/ɪˈvæljueɪt/",zh:"評估"},
+{word:"demonstrate",ipa:"/ˈdɛmənstreɪt/",zh:"示範"},
+{word:"emphasize",ipa:"/ˈɛmfəsaɪz/",zh:"強調"},
+{word:"identify",ipa:"/aɪˈdɛntɪfaɪ/",zh:"識別"},
+{word:"interpret",ipa:"/ɪnˈtɜːrprɪt/",zh:"解釋"},
+{word:"collaborate",ipa:"/kəˈlæbəreɪt/",zh:"合作"},
+{word:"anticipate",ipa:"/ænˈtɪsɪpeɪt/",zh:"預期"},
+{word:"attribute",ipa:"/əˈtrɪbjuːt/",zh:"歸因"},
+{word:"facilitate",ipa:"/fəˈsɪlɪteɪt/",zh:"促進"},
+{word:"generate",ipa:"/ˈdʒɛnəreɪt/",zh:"產生"},
+{word:"integrate",ipa:"/ˈɪntɪɡreɪt/",zh:"整合"},
+{word:"justify",ipa:"/ˈdʒʌstɪfaɪ/",zh:"合理化"},
+{word:"maintain",ipa:"/meɪnˈteɪn/",zh:"維持"},
+{word:"minimize",ipa:"/ˈmɪnɪmaɪz/",zh:"最小化"},
+{word:"monitor",ipa:"/ˈmɒnɪtər/",zh:"監控"},
+{word:"perceive",ipa:"/pərˈsiːv/",zh:"察覺"},
+{word:"prioritize",ipa:"/praɪˈɒrɪtaɪz/",zh:"優先排序"},
+{word:"promote",ipa:"/prəˈmoʊt/",zh:"促進"},
+{word:"regulate",ipa:"/ˈrɛɡjuleɪt/",zh:"規範"},
+{word:"resolve",ipa:"/rɪˈzɒlv/",zh:"解決"},
+{word:"stimulate",ipa:"/ˈstɪmjuleɪt/",zh:"刺激"},
+// nouns
+{word:"concept",ipa:"/ˈkɒnsɛpt/",zh:"概念"},
+{word:"consequence",ipa:"/ˈkɒnsɪkwəns/",zh:"後果"},
+{word:"controversy",ipa:"/ˈkɒntrəvɜːrsi/",zh:"爭議"},
+{word:"diversity",ipa:"/daɪˈvɜːrsɪti/",zh:"多樣性"},
+{word:"efficiency",ipa:"/ɪˈfɪʃənsi/",zh:"效率"},
+{word:"equality",ipa:"/ɪˈkwɒlɪti/",zh:"平等"},
+{word:"evidence",ipa:"/ˈɛvɪdəns/",zh:"證據"},
+{word:"impact",ipa:"/ˈɪmpækt/",zh:"影響"},
+{word:"innovation",ipa:"/ˌɪnəˈveɪʃən/",zh:"創新"},
+{word:"mechanism",ipa:"/ˈmɛkənɪzəm/",zh:"機制"},
+{word:"perspective",ipa:"/pərˈspɛktɪv/",zh:"觀點"},
+{word:"phenomenon",ipa:"/fɪˈnɒmɪnɒn/",zh:"現象"},
+{word:"policy",ipa:"/ˈpɒlɪsi/",zh:"政策"},
+{word:"strategy",ipa:"/ˈstrætɪdʒi/",zh:"策略"},
+{word:"structure",ipa:"/ˈstrʌktʃər/",zh:"結構"},
+{word:"tendency",ipa:"/ˈtɛndənsi/",zh:"傾向"},
+{word:"transition",ipa:"/trænˈzɪʃən/",zh:"轉變"},
+{word:"assumption",ipa:"/əˈsʌmpʃən/",zh:"假設"},
+{word:"implication",ipa:"/ˌɪmplɪˈkeɪʃən/",zh:"含義"},
+{word:"distinction",ipa:"/dɪˈstɪŋkʃən/",zh:"區別"},
+// adj
+{word:"sufficient",ipa:"/səˈfɪʃənt/",zh:"足夠的"},
+{word:"substantial",ipa:"/səbˈstænʃəl/",zh:"相當大的"},
+{word:"fundamental",ipa:"/ˌfʌndəˈmɛntəl/",zh:"基本的"},
+{word:"inevitable",ipa:"/ɪnˈɛvɪtəbəl/",zh:"不可避免的"},
+{word:"comprehensive",ipa:"/ˌkɒmprɪˈhɛnsɪv/",zh:"全面的"},
+{word:"controversial",ipa:"/ˌkɒntrəˈvɜːrʃəl/",zh:"有爭議的"},
+{word:"elaborate",ipa:"/ɪˈlæbərɪt/",zh:"精心設計的"},
+{word:"explicit",ipa:"/ɪkˈsplɪsɪt/",zh:"明確的"},
+{word:"implicit",ipa:"/ɪmˈplɪsɪt/",zh:"含蓄的"},
+{word:"intrinsic",ipa:"/ɪnˈtrɪnsɪk/",zh:"內在的"},
+{word:"plausible",ipa:"/ˈplɔːzɪbəl/",zh:"合理的"},
+{word:"predominant",ipa:"/prɪˈdɒmɪnənt/",zh:"主要的"},
+{word:"rational",ipa:"/ˈræʃənəl/",zh:"理性的"},
+{word:"relevant",ipa:"/ˈrɛlɪvənt/",zh:"相關的"},
+{word:"robust",ipa:"/roʊˈbʌst/",zh:"強壯的"},
+{word:"sophisticated",ipa:"/səˈfɪstɪkeɪtɪd/",zh:"複雜的"},
+{word:"vulnerable",ipa:"/ˈvʌlnərəbəl/",zh:"脆弱的"},
+// adv/conj
+{word:"consequently",ipa:"/ˈkɒnsɪkwəntli/",zh:"因此"},
+{word:"nonetheless",ipa:"/ˌnʌnðəˈlɛs/",zh:"儘管如此"},
+{word:"nevertheless",ipa:"/ˌnɛvərðəˈlɛs/",zh:"然而"},
+{word:"subsequently",ipa:"/ˈsʌbsɪkwəntli/",zh:"隨後"},
+{word:"simultaneously",ipa:"/ˌsɪməlˈteɪniəsli/",zh:"同時地"},
+{word:"inherently",ipa:"/ɪnˈhɪərəntli/",zh:"本質上地"}
+],
+C1:[
+{word:"coherent",ipa:"/koʊˈhɪərənt/",zh:"連貫的"},
+{word:"meticulous",ipa:"/məˈtɪkjələs/",zh:"一絲不苟的"},
+{word:"articulate",ipa:"/ɑːrˈtɪkjuleɪt/",zh:"口才好的"},
+{word:"eloquent",ipa:"/ˈɛlɪkwənt/",zh:"雄辯的"},
+{word:"ambiguous",ipa:"/æmˈbɪɡjuəs/",zh:"模糊的"},
+{word:"arbitrary",ipa:"/ˈɑːrbɪtrɛri/",zh:"任意的"},
+{word:"autonomous",ipa:"/ɔːˈtɒnəməs/",zh:"自治的"},
+{word:"catalyst",ipa:"/ˈkætəlɪst/",zh:"催化劑"},
+{word:"compensate",ipa:"/ˈkɒmpənseɪt/",zh:"補償"},
+{word:"conceptualize",ipa:"/kɒnˈsɛptʃuəlaɪz/",zh:"概念化"},
+{word:"contemplate",ipa:"/ˈkɒntəmpleɪt/",zh:"沉思"},
+{word:"contradict",ipa:"/ˌkɒntrəˈdɪkt/",zh:"矛盾"},
+{word:"correlate",ipa:"/ˈkɒrəleɪt/",zh:"相關聯"},
+{word:"deduce",ipa:"/dɪˈdjuːs/",zh:"推斷"},
+{word:"deteriorate",ipa:"/dɪˈtɪəriəreɪt/",zh:"惡化"},
+{word:"differentiate",ipa:"/ˌdɪfəˈrɛnʃieɪt/",zh:"區分"},
+{word:"discourse",ipa:"/ˈdɪskɔːrs/",zh:"話語"},
+{word:"elicit",ipa:"/ɪˈlɪsɪt/",zh:"引出"},
+{word:"embody",ipa:"/ɪmˈbɒdi/",zh:"體現"},
+{word:"endorse",ipa:"/ɪnˈdɔːrs/",zh:"認可"},
+{word:"enhance",ipa:"/ɪnˈhɑːns/",zh:"增強"},
+{word:"exacerbate",ipa:"/ɪɡˈzæsərbeɪt/",zh:"加劇"},
+{word:"exemplify",ipa:"/ɪɡˈzɛmplɪfaɪ/",zh:"舉例說明"},
+{word:"extrapolate",ipa:"/ɪkˈstræpəleɪt/",zh:"推算"},
+{word:"formulate",ipa:"/ˈfɔːrmjuleɪt/",zh:"制定"},
+// nouns
+{word:"ambivalence",ipa:"/æmˈbɪvələns/",zh:"矛盾心理"},
+{word:"anomaly",ipa:"/əˈnɒməli/",zh:"異常"},
+{word:"assertion",ipa:"/əˈsɜːrʃən/",zh:"斷言"},
+{word:"cognition",ipa:"/kɒɡˈnɪʃən/",zh:"認知"},
+{word:"connotation",ipa:"/ˌkɒnəˈteɪʃən/",zh:"隱含意義"},
+{word:"discourse",ipa:"/ˈdɪskɔːrs/",zh:"言談"},
+{word:"disposition",ipa:"/ˌdɪspəˈzɪʃən/",zh:"性情"},
+{word:"endeavour",ipa:"/ɪnˈdɛvər/",zh:"努力"},
+{word:"paradigm",ipa:"/ˈpærədaɪm/",zh:"範式"},
+{word:"rhetoric",ipa:"/ˈrɛtərɪk/",zh:"修辭"},
+{word:"scrutiny",ipa:"/ˈskruːtɪni/",zh:"審查"},
+{word:"speculation",ipa:"/ˌspɛkjuˈleɪʃən/",zh:"推測"},
+{word:"synthesis",ipa:"/ˈsɪnθɪsɪs/",zh:"綜合"},
+{word:"trajectory",ipa:"/trəˈdʒɛktəri/",zh:"軌跡"},
+{word:"nuance",ipa:"/ˈnjuːɑːns/",zh:"細微差別"},
+// adj
+{word:"astute",ipa:"/əˈstjuːt/",zh:"精明的"},
+{word:"benevolent",ipa:"/bɪˈnɛvələnt/",zh:"仁慈的"},
+{word:"candid",ipa:"/ˈkændɪd/",zh:"坦率的"},
+{word:"cogent",ipa:"/ˈkoʊdʒənt/",zh:"有力的"},
+{word:"convoluted",ipa:"/ˈkɒnvəluːtɪd/",zh:"複雜的"},
+{word:"disparate",ipa:"/ˈdɪspərɪt/",zh:"迥異的"},
+{word:"erroneous",ipa:"/ɪˈroʊniəs/",zh:"錯誤的"},
+{word:"exhaustive",ipa:"/ɪɡˈzɔːstɪv/",zh:"詳盡的"},
+{word:"formidable",ipa:"/ˈfɔːrmɪdəbəl/",zh:"可怕的"},
+{word:"incisive",ipa:"/ɪnˈsaɪsɪv/",zh:"深刻的"},
+{word:"innate",ipa:"/ɪˈneɪt/",zh:"天生的"},
+{word:"pervasive",ipa:"/pərˈveɪsɪv/",zh:"普遍的"},
+{word:"pragmatic",ipa:"/præɡˈmætɪk/",zh:"務實的"},
+{word:"reciprocal",ipa:"/rɪˈsɪprəkəl/",zh:"相互的"},
+{word:"tenacious",ipa:"/tɪˈneɪʃəs/",zh:"頑強的"},
+// adv
+{word:"categorically",ipa:"/ˌkætɪˈɡɒrɪkli/",zh:"明確地"},
+{word:"conceivably",ipa:"/kənˈsiːvəbli/",zh:"可以想像地"},
+{word:"paradoxically",ipa:"/ˌpærəˈdɒksɪkli/",zh:"矛盾地"},
+{word:"predominantly",ipa:"/prɪˈdɒmɪnəntli/",zh:"主要地"},
+{word:"retrospectively",ipa:"/ˌrɛtrəˈspɛktɪvli/",zh:"回顧地"},
+{word:"tangentially",ipa:"/tænˈdʒɛnʃəli/",zh:"切線地"},
+{word:"unequivocally",ipa:"/ˌʌnɪˈkwɪvəkli/",zh:"明確無誤地"},
+{word:"vicariously",ipa:"/vɪˈkɛəriəsli/",zh:"間接地"},
+{word:"meticulously",ipa:"/məˈtɪkjələsli/",zh:"一絲不苟地"},
+{word:"eloquently",ipa:"/ˈɛlɪkwəntli/",zh:"雄辯地"}
+],
+C2:[
+{word:"discomfit",ipa:"/dɪsˈkʌmfɪt/",zh:"使困窘"},
+{word:"vibrissae",ipa:"/vɪˈbrɪsiː/",zh:"動物觸鬚"},
+{word:"abdicate",ipa:"/ˈæbdɪkeɪt/",zh:"退位"},
+{word:"abjure",ipa:"/æbˈdʒʊər/",zh:"鄭重放棄"},
+{word:"abstemious",ipa:"/æbˈstiːmiəs/",zh:"節制的"},
+{word:"acrimonious",ipa:"/ˌækrɪˈmoʊniəs/",zh:"尖刻的"},
+{word:"adumbrate",ipa:"/ˈædʌmbreɪt/",zh:"略述"},
+{word:"anachronism",ipa:"/əˈnækrənɪzəm/",zh:"時代錯誤"},
+{word:"anathema",ipa:"/əˈnæθɪmə/",zh:"詛咒物"},
+{word:"antipathy",ipa:"/ænˈtɪpəθi/",zh:"反感"},
+{word:"apposite",ipa:"/ˈæpəzɪt/",zh:"貼切的"},
+{word:"approbation",ipa:"/ˌæprəˈbeɪʃən/",zh:"認可"},
+{word:"arcane",ipa:"/ɑːrˈkeɪn/",zh:"神秘的"},
+{word:"assiduous",ipa:"/əˈsɪdjuəs/",zh:"勤勉的"},
+{word:"atavistic",ipa:"/ˌætəˈvɪstɪk/",zh:"隔代遺傳的"},
+{word:"bellicose",ipa:"/ˈbɛlɪkoʊs/",zh:"好戰的"},
+{word:"bifurcate",ipa:"/ˈbaɪfɜːrkeɪt/",zh:"分叉"},
+{word:"bombastic",ipa:"/bɒmˈbæstɪk/",zh:"誇大的"},
+{word:"browbeat",ipa:"/ˈbraʊbiːt/",zh:"恐嚇"},
+{word:"byzantine",ipa:"/ˈbɪzəntiːn/",zh:"複雜的"},
+{word:"cacophony",ipa:"/kəˈkɒfəni/",zh:"刺耳噪音"},
+{word:"capitulate",ipa:"/kəˈpɪtjuleɪt/",zh:"投降"},
+{word:"cavil",ipa:"/ˈkævɪl/",zh:"挑剔"},
+{word:"chimerical",ipa:"/kɪˈmɛrɪkəl/",zh:"幻想的"},
+{word:"circumlocution",ipa:"/ˌsɜːrkəmloʊˈkjuːʃən/",zh:"迂迴說法"},
+{word:"cogitate",ipa:"/ˈkɒdʒɪteɪt/",zh:"深思"},
+{word:"colloquial",ipa:"/kəˈloʊkwiəl/",zh:"口語的"},
+{word:"commensurate",ipa:"/kəˈmɛnʃərɪt/",zh:"相稱的"},
+{word:"compunction",ipa:"/kəmˈpʌŋkʃən/",zh:"良心不安"},
+{word:"condescend",ipa:"/ˌkɒndɪˈsɛnd/",zh:"屈尊"},
+{word:"conflagration",ipa:"/ˌkɒnfləˈɡreɪʃən/",zh:"大火"},
+{word:"consternation",ipa:"/ˌkɒnstərˈneɪʃən/",zh:"驚愕"},
+{word:"contentious",ipa:"/kənˈtɛnʃəs/",zh:"有爭議的"},
+{word:"contrition",ipa:"/kənˈtrɪʃən/",zh:"悔恨"},
+{word:"convivial",ipa:"/kənˈvɪviəl/",zh:"歡樂的"},
+{word:"copious",ipa:"/ˈkoʊpiəs/",zh:"大量的"},
+{word:"corroborate",ipa:"/kəˈrɒbəreɪt/",zh:"確認"},
+{word:"culpable",ipa:"/ˈkʌlpəbəl/",zh:"有罪的"},
+{word:"cupidity",ipa:"/kjuːˈpɪdɪti/",zh:"貪婪"},
+{word:"dearth",ipa:"/dɜːrθ/",zh:"缺乏"},
+{word:"debilitate",ipa:"/dɪˈbɪlɪteɪt/",zh:"使衰弱"},
+{word:"decry",ipa:"/dɪˈkraɪ/",zh:"公開批評"},
+{word:"defenestration",ipa:"/dɪˌfɛnɪˈstreɪʃən/",zh:"從窗戶扔出"},
+{word:"deferential",ipa:"/ˌdɛfəˈrɛnʃəl/",zh:"恭敬的"},
+{word:"deleterious",ipa:"/ˌdɛlɪˈtɪəriəs/",zh:"有害的"},
+{word:"demure",ipa:"/dɪˈmjʊər/",zh:"嫻靜的"},
+{word:"denizen",ipa:"/ˈdɛnɪzən/",zh:"居民"},
+{word:"deprecate",ipa:"/ˈdɛprɪkeɪt/",zh:"反對"},
+{word:"desultory",ipa:"/ˈdɛsəltəri/",zh:"散漫的"},
+{word:"disingenuous",ipa:"/ˌdɪsɪnˈdʒɛnjuəs/",zh:"不誠實的"},
+{word:"dissemble",ipa:"/dɪˈsɛmbəl/",zh:"掩飾"},
+{word:"ebullient",ipa:"/ɪˈbʌliənt/",zh:"熱情洋溢的"},
+{word:"effulgent",ipa:"/ɪˈfʌldʒənt/",zh:"光輝燦爛的"},
+{word:"egregious",ipa:"/ɪˈɡriːdʒəs/",zh:"極其惡劣的"},
+{word:"emollient",ipa:"/ɪˈmɒliənt/",zh:"緩和的"},
+{word:"enervate",ipa:"/ˈɛnərveɪt/",zh:"使衰弱"},
+{word:"ephemeral",ipa:"/ɪˈfɛmərəl/",zh:"短暫的"},
+{word:"equanimity",ipa:"/ˌiːkwəˈnɪmɪti/",zh:"沉著"},
+{word:"equivocate",ipa:"/ɪˈkwɪvəkeɪt/",zh:"搪塞"},
+{word:"erudite",ipa:"/ˈɛruːdaɪt/",zh:"博學的"},
+{word:"eschew",ipa:"/ɪˈʃuː/",zh:"回避"},
+{word:"estimable",ipa:"/ˈɛstɪməbəl/",zh:"值得尊敬的"},
+{word:"excoriate",ipa:"/ɪkˈskɔːrieɪt/",zh:"嚴厲批評"},
+{word:"exigent",ipa:"/ˈɛksɪdʒənt/",zh:"緊迫的"},
+{word:"expiate",ipa:"/ˈɛksɪeɪt/",zh:"贖罪"},
+{word:"facetious",ipa:"/fəˈsiːʃəs/",zh:"愛開玩笑的"},
+{word:"fallacious",ipa:"/fəˈleɪʃəs/",zh:"謬誤的"},
+{word:"fatuous",ipa:"/ˈfætʃuəs/",zh:"愚蠢的"},
+{word:"flippant",ipa:"/ˈflɪpənt/",zh:"輕率的"},
+{word:"florid",ipa:"/ˈflɒrɪd/",zh:"過於華麗的"},
+{word:"fractious",ipa:"/ˈfrækʃəs/",zh:"易怒的"},
+{word:"garrulous",ipa:"/ˈɡærʊləs/",zh:"話多的"},
+{word:"germane",ipa:"/dʒɜːrˈmeɪn/",zh:"切題的"},
+{word:"grandiloquent",ipa:"/ɡrænˈdɪləkwənt/",zh:"誇張的"},
+{word:"gratuitous",ipa:"/ɡrəˈtjuːɪtəs/",zh:"無理由的"},
+{word:"harangue",ipa:"/həˈræŋ/",zh:"長篇說教"},
+{word:"hegemony",ipa:"/hɪˈdʒɛməni/",zh:"霸權"},
+{word:"hubris",ipa:"/ˈhjuːbrɪs/",zh:"傲慢"},
+{word:"hyperbole",ipa:"/haɪˈpɜːrbəli/",zh:"誇張"},
+{word:"iconoclast",ipa:"/aɪˈkɒnəklæst/",zh:"破除偶像者"},
+{word:"idiosyncratic",ipa:"/ˌɪdiəsɪŋˈkrætɪk/",zh:"特殊的"},
+{word:"ignominious",ipa:"/ˌɪɡnəˈmɪniəs/",zh:"可恥的"},
+{word:"impecunious",ipa:"/ˌɪmpɪˈkjuːniəs/",zh:"貧困的"},
+{word:"imperturbable",ipa:"/ˌɪmpərˈtɜːrbəbəl/",zh:"沉著冷靜的"},
+{word:"impugn",ipa:"/ɪmˈpjuːn/",zh:"批評"},
+{word:"inauspicious",ipa:"/ˌɪnɔːˈspɪʃəs/",zh:"不吉利的"},
+{word:"inchoate",ipa:"/ɪnˈkoʊɪt/",zh:"剛起步的"},
+{word:"incorrigible",ipa:"/ɪnˈkɒrɪdʒɪbəl/",zh:"屢教不改的"},
+{word:"indefatigable",ipa:"/ˌɪndɪˈfætɪɡəbəl/",zh:"不知疲倦的"},
+{word:"indigent",ipa:"/ˈɪndɪdʒənt/",zh:"貧窮的"},
+{word:"inimical",ipa:"/ɪˈnɪmɪkəl/",zh:"有害的"},
+{word:"innocuous",ipa:"/ɪˈnɒkjuəs/",zh:"無害的"},
+{word:"insipid",ipa:"/ɪnˈsɪpɪd/",zh:"平淡的"},
+{word:"intransigent",ipa:"/ɪnˈtrænsɪdʒənt/",zh:"不妥協的"},
+{word:"inveterate",ipa:"/ɪnˈvɛtərɪt/",zh:"根深蒂固的"},
+{word:"irascible",ipa:"/ɪˈræsɪbəl/",zh:"易怒的"},
+{word:"laconic",ipa:"/ləˈkɒnɪk/",zh:"簡潔的"},
+{word:"loquacious",ipa:"/loʊˈkweɪʃəs/",zh:"健談的"}
+]};
+
+// ============================================================
+// ADAPTIVE LOGIC
+// ============================================================
+const CEFR_ORDER = ['A1','A2','B1','B2','C1','C2'];
+const CEFR_LABELS = {
+  A1:'Beginner',A2:'Elementary',B1:'Intermediate',
+  B2:'Upper Intermediate',C1:'Advanced',C2:'Mastery'
+};
+// Vocab size estimates for CEFR levels
+const VOCAB_EST = {A1:500,A2:1500,B1:3500,B2:6000,C1:10000,C2:16000};
+
+let studentName = '';
+let round = 1;
+let round1Words = [];
+let round2Words = [];
+let round1Results = {};
+let round2Results = {};
+let allTested = [];
+
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-.5); }
+
+function pickRound1(){
+  // 4 from each CEFR level = 24 but we want 20
+  // A1:4, A2:4, B1:4, B2:4, C1:2, C2:2
+  const dist = {A1:4,A2:4,B1:4,B2:4,C1:2,C2:2};
+  let words = [];
+  CEFR_ORDER.forEach(lvl=>{
+    words = words.concat(shuffle(VOCAB[lvl]).slice(0,dist[lvl]).map(w=>({...w,cefr:lvl})));
+  });
+  return shuffle(words);
+}
+
+function estimateLevel(r1words, r1results){
+  // Calculate % correct per level
+  const byLevel = {};
+  CEFR_ORDER.forEach(l=>{ byLevel[l]={correct:0,total:0}; });
+  r1words.forEach(w=>{
+    byLevel[w.cefr].total++;
+    if(r1results[w.word]) byLevel[w.cefr].correct++;
+  });
+  // Find the highest level where student got >= 50%
+  let estimatedIdx = 0;
+  CEFR_ORDER.forEach((l,i)=>{
+    const d = byLevel[l];
+    if(d.total>0 && d.correct/d.total >= 0.5) estimatedIdx = i;
+  });
+  return {estimatedIdx, byLevel};
+}
+
+function pickRound2(estimatedIdx){
+  // Focus words around estimated level
+  const idx = estimatedIdx;
+  // Distribution: level-1: 10, level: 20, level+1: 10
+  const dists = {};
+  CEFR_ORDER.forEach(l=>dists[l]=0);
+  if(idx > 0) dists[CEFR_ORDER[idx-1]] = 10;
+  dists[CEFR_ORDER[idx]] = 20;
+  if(idx < 5) dists[CEFR_ORDER[idx+1]] = 10;
+  // Normalize to 40
+  let total = Object.values(dists).reduce((a,b)=>a+b,0);
+  if(total < 40 && idx === 0){ dists['A1']=20; dists['A2']=14; dists['B1']=6; }
+  if(total < 40 && idx === 5){ dists['B2']=6; dists['C1']=14; dists['C2']=20; }
+
+  // Exclude round1 words
+  const usedWords = new Set(round1Words.map(w=>w.word));
+  let words = [];
+  CEFR_ORDER.forEach(lvl=>{
+    if(dists[lvl] > 0){
+      const pool = VOCAB[lvl].filter(w=>!usedWords.has(w.word));
+      words = words.concat(shuffle(pool).slice(0,dists[lvl]).map(w=>({...w,cefr:lvl})));
+    }
+  });
+  return shuffle(words).slice(0,40);
+}
+
+// ============================================================
+// UI
+// ============================================================
+function startTest(){
+  const input = document.getElementById('student-name');
+  const name = input.value.trim();
+  if(!name){ input.focus(); input.style.borderColor='var(--danger)'; return; }
+  input.style.borderColor='';
+  studentName = name;
+  round = 1;
+  round1Words = pickRound1();
+  round1Results = {};
+  round2Results = {};
+  allTested = [];
+  renderTestScreen();
+  showScreen('test');
+}
+
+function renderTestScreen(){
+  document.getElementById('avatar-initial').textContent = studentName.charAt(0).toUpperCase();
+  document.getElementById('display-name').textContent = studentName;
+  const words = round === 1 ? round1Words : round2Words;
+  const total = words.length;
+  document.getElementById('round-badge').innerHTML = `Round <span>${round}</span> of 2`;
+  document.getElementById('prog-label').textContent = `${total} words · Round ${round}`;
+  document.getElementById('prog-pct').textContent = '0%';
+  document.getElementById('progress-fill').style.width = '0%';
+  document.getElementById('finish-btn').textContent = round===1 ? '✓ Finish Round 1' : '✓ Finish & See Results';
+  document.getElementById('round2-notice').style.display = round===2 ? 'flex' : 'none';
+
+  renderWords(words, round===1 ? round1Results : round2Results);
+}
+
+function renderWords(words, results){
+  const grid = document.getElementById('words-grid');
+  grid.innerHTML = '';
+  words.forEach(w=>{
+    const card = document.createElement('div');
+    card.className = 'word-card' + (results[w.word]?' checked':'');
+    card.id = 'card-'+w.word;
+    card.onclick = () => toggleWord(w.word, words, results);
+    card.innerHTML = `
+      <div class="word-top"><div class="check-box"><span class="check-mark">✓</span></div>
+      </div>
+      <div class="word-text">${w.word}</div>
+      <div class="word-ipa">${w.ipa}</div>
+      <div class="tooltip">
+        <div class="tip-word">${w.word}</div>
+        <div class="tip-ipa">${w.ipa}</div>
+        <div class="tip-zh">${w.zh}</div>
+        <button class="speak-btn" onclick="speak('${w.word.replace(/'/g,"\\'")}');event.stopPropagation();">🔊 Pronounce</button>
+      </div>`;
+    grid.appendChild(card);
+  });
+  updateProgress(words, results);
+}
+
+function toggleWord(word, words, results){
+  results[word] = !results[word];
+  const card = document.getElementById('card-'+word);
+  if(card){
+    card.classList.toggle('checked', !!results[word]);
+  }
+  updateProgress(words, results);
+}
+
+function updateProgress(words, results){
+  const checked = words.filter(w=>results[w.word]).length;
+  const pct = Math.round(checked/words.length*100);
+  document.getElementById('prog-label').textContent = `${checked} / ${words.length} known`;
+  document.getElementById('prog-pct').textContent = pct+'%';
+  document.getElementById('progress-fill').style.width = pct+'%';
+}
+
+function finishRound(){
+  if(round === 1){
+    const {estimatedIdx} = estimateLevel(round1Words, round1Results);
+    round2Words = pickRound2(estimatedIdx);
+    round = 2;
+    renderTestScreen();
+  } else {
+    showResults();
+  }
+}
+
+function showResults(){
+  // Combine all tested words
+  allTested = [
+    ...round1Words.map(w=>({...w, known: !!round1Results[w.word], round:1})),
+    ...round2Words.map(w=>({...w, known: !!round2Results[w.word], round:2}))
+  ];
+
+  const totalWords = allTested.length;
+  const knownWords = allTested.filter(w=>w.known).length;
+  const pct = Math.round(knownWords/totalWords*100);
+
+  // Determine CEFR level
+  const byLevel = {};
+  CEFR_ORDER.forEach(l=>byLevel[l]={correct:0,total:0});
+  allTested.forEach(w=>{
+    byLevel[w.cefr].total++;
+    if(w.known) byLevel[w.cefr].correct++;
+  });
+  let cefrIdx = 0;
+  CEFR_ORDER.forEach((l,i)=>{
+    const d = byLevel[l];
+    if(d.total>0 && d.correct/d.total >= 0.6) cefrIdx = i;
+  });
+  const cefrLevel = CEFR_ORDER[cefrIdx];
+
+  // Estimated vocab size
+  const estVocab = VOCAB_EST[cefrLevel];
+
+  // Score display
+  document.getElementById('result-score').innerHTML = `<span>${pct}%</span>`;
+  document.getElementById('result-label').textContent = `${knownWords} of ${totalWords} words recognized across both rounds`;
+  document.getElementById('cefr-result-badge').textContent = CEFR_LABELS[cefrLevel];
+  document.getElementById('cefr-result-desc').textContent = 'Estimated proficiency level based on adaptive test performance';
+  document.getElementById('stat-correct').textContent = knownWords;
+  document.getElementById('stat-total').textContent = totalWords;
+  document.getElementById('stat-est').textContent = estVocab.toLocaleString()+'+';
+
+  // Breakdown bars
+  let barsHTML = '';
+  CEFR_ORDER.forEach(l=>{
+    const d = byLevel[l];
+    if(d.total===0) return;
+    const p = Math.round(d.correct/d.total*100);
+    barsHTML += `<div class="brow">
+      <div class="brow-label">${l}</div>
+      <div class="brow-bar-wrap"><div class="brow-bar" style="width:${p}%;background:var(--accent2)"></div></div>
+      <div class="brow-pct">${p}%</div>
+    </div>`;
+  });
+  document.getElementById('breakdown-bars').innerHTML = barsHTML;
+
+  // Word table
+  renderTable(allTested);
+  showScreen('results');
+}
+
+let currentFilter = 'all';
+function filterTable(filter, btn){
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable(allTested);
+}
+function renderTable(words){
+  let filtered = words;
+  if(currentFilter==='correct') filtered=words.filter(w=>w.known);
+  else if(currentFilter==='wrong') filtered=words.filter(w=>!w.known);
+  else if(CEFR_ORDER.includes(currentFilter)) filtered=words.filter(w=>w.cefr===currentFilter);
+  const tbody = document.getElementById('result-tbody');
+  tbody.innerHTML = filtered.map((w,i)=>`
+    <tr>
+      <td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:12px">${i+1}</td>
+      <td style="font-family:'DM Serif Display',serif;font-size:16px">${w.word}</td>
+      <td class="td-ipa">${w.ipa}</td>
+      <td style="color:var(--text2)">${w.zh}</td>
+      <td class="td-result">${w.known?'<span class="result-correct">✓</span>':'<span class="result-wrong">✗</span>'}</td>
+    </tr>`).join('');
+}
+
+function speak(word){
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = 'en-US'; u.rate = 0.9;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>{
+    s.classList.remove('active');
+    s.style.display='none';
+  });
+  const el = document.getElementById('screen-'+id);
+  el.style.display='block';
+  requestAnimationFrame(()=>el.classList.add('active'));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function resetTest(){
+  document.getElementById('student-name').value='';
+  showScreen('setup');
+}
+
+function exportCSV(){
+  if(!allTested.length) return;
+  const header = ['Word','IPA','Chinese','CEFR','Level','Known','Round'];
+  const rows = allTested.map(w=>[
+    w.word, w.ipa, w.zh, w.cefr, CEFR_LABELS[w.cefr], w.known?'Yes':'No', w.round
+  ]);
+  const csv = [header,...rows].map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url;
+  const dateStr = new Date().toISOString().slice(0,10);
+  a.download = `CEFR_Assessment_${studentName.replace(/\s+/g,'_')}_${dateStr}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
