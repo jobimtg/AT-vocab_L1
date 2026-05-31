@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AmazingTalker - Travel English</title>
+
+<style>
+:root{
+    --cream:#FAF7F2;
+    --blue:#5B8DEF;
+    --text:#2F3542;
+    --subtext:#6B7280;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body{
+    background:var(--cream);
+    color:var(--text);
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+.header{
+    padding:30px 50px;
+    font-size:1.1rem;
+    font-weight:600;
+    color:var(--blue);
+    letter-spacing:0.3px;
+}
+
+.hero{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+}
+
+.hero h1{
+    font-size:clamp(2.8rem,6vw,5.5rem);
+    font-weight:700;
+    line-height:1.15;
+    letter-spacing:-1.5px;
+    max-width:900px;
+}
+
+.highlight{
+    color:var(--blue);
+}
+
+.subtitle{
+    margin-top:28px;
+    max-width:720px;
+    font-size:1.15rem;
+    line-height:1.8;
+    color:var(--subtext);
+    padding:0 20px;
+}
+
+@media (max-width:768px){
+
+    .header{
+        padding:24px;
+        font-size:1rem;
+    }
+
+    .hero h1{
+        font-size:2.8rem;
+    }
+
+    .subtitle{
+        font-size:1rem;
+        line-height:1.7;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+    AmazingTalker - Travel English
+</div>
+
+<div class="hero">
+
+    <h1>
+        Speak English
+        <span class="highlight">Naturally</span>
+        for Travel
+    </h1>
+
+    <p class="subtitle">
+        Learn practical English for airports, hotels, restaurants,
+        transportation, shopping, and everyday travel situations.
+        Build confidence and communicate naturally wherever your journey takes you.
+    </p>
+
+</div>
+
+</body>
+</html>
