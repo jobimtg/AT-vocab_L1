@@ -1,190 +1,1601 @@
-
 <style>
-h2.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.hdr{padding:1rem 0 0.5rem;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1rem}
-.hdr-title{font-size:18px;font-weight:500;color:var(--color-text-primary);margin:0 0 2px}
-.hdr-sub{font-size:13px;color:var(--color-text-secondary);margin:0}
-.controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem;align-items:center}
-.filters{display:flex;flex-wrap:wrap;gap:6px;flex:1}
-.fb{font-size:12px;padding:4px 10px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:background 0.15s}
-.fb.active{color:var(--color-text-primary);font-weight:500}
-.fb[data-cat="all"].active{background:#E6F1FB;border-color:#85B7EB;color:#0C447C}
-.fb[data-cat="Greetings"].active{background:#FAECE7;border-color:#F0997B;color:#712B13}
-.fb[data-cat="Introductions"].active{background:#FAEEDA;border-color:#EF9F27;color:#633806}
-.fb[data-cat="Check-In"].active{background:#EEEDFE;border-color:#AFA9EC;color:#3C3489}
-.fb[data-cat="Documents"].active{background:#E1F5EE;border-color:#5DCAA5;color:#085041}
-.fb[data-cat="Key Phrases"].active{background:#E6F1FB;border-color:#85B7EB;color:#0C447C}
-.search-box{padding:6px 10px;border-radius:20px;border:0.5px solid var(--color-border-secondary);font-size:13px;background:var(--color-background-primary);color:var(--color-text-primary);width:180px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
-.vcard{background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);overflow:hidden;display:flex;flex-direction:row}
+*{box-sizing:border-box;margin:0;padding:0}
+.vc-wrap{font-family:var(--font-sans);padding:12px 0}
+.vc-header{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.vc-sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:12px}
+.vc-controls{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;align-items:center}
+.vc-search{flex:1;min-width:140px;border:1.5px solid var(--color-border-tertiary);border-radius:8px;padding:5px 10px;font-size:12px;background:var(--color-background-primary);color:var(--color-text-primary);outline:none}
+.vc-search:focus{border-color:var(--color-border-secondary)}
+.vc-filter{border:1.5px solid var(--color-border-tertiary);border-radius:20px;padding:3px 11px;font-size:11px;cursor:pointer;background:var(--color-background-primary);color:var(--color-text-secondary);transition:all .15s;white-space:nowrap}
+.vc-filter.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.vc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:540px){.vc-grid{grid-template-columns:repeat(2,1fr)}}
+.vcard{border:1.5px solid var(--color-border-tertiary);border-radius:12px;overflow:hidden;display:flex;background:var(--color-background-primary);transition:border-color .15s}
+.vcard:hover{border-color:var(--color-border-secondary)}
+.vcard-accent{width:4px;flex-shrink:0}
+.vcard-body{padding:10px 9px 9px 8px;flex:1;min-width:0}
+.vcard-pic{display:flex;justify-content:center;margin-bottom:5px}
+.vcard-en{font-size:13px;font-weight:500;color:var(--color-text-primary);text-align:center}
+.vcard-pron{font-size:10px;color:var(--color-text-tertiary);text-align:center;margin-top:1px}
+.vcard-meaning{font-size:10px;color:var(--color-text-secondary);text-align:center;margin-top:4px;font-style:italic;line-height:1.45;padding:0 2px}
+.vcard-divider{height:1px;background:var(--color-border-tertiary);margin:6px 4px}
+.vcard-zh{font-size:15px;color:var(--color-text-primary);text-align:center;font-weight:500;letter-spacing:.5px}
+.vcard-ex{font-size:10px;color:var(--color-text-secondary);text-align:center;margin-top:4px;line-height:1.4;font-style:italic}
+.vcard-practice{background:var(--color-background-secondary);border-radius:6px;padding:7px 9px;margin-top:7px}
+.vcard-practice-label{font-size:10px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px}
+.vcard-practice-item{font-size:10px;color:var(--color-text-secondary);line-height:1.55}
+.vc-footer{font-size:11px;color:var(--color-text-tertiary);margin-top:12px;text-align:center}
 .vcard.hidden{display:none}
-.vcard-accent{width:5px;flex-shrink:0;border-radius:0}
-.vcard-body{padding:12px;flex:1;min-width:0}
-.vcard-pic{margin-bottom:6px;display:flex;justify-content:center}
-.vcard-en{font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:1px}
-.vcard-pron{font-size:12px;color:var(--color-text-secondary);margin-bottom:5px;font-style:italic}
-.vcard-meaning{font-size:12px;color:var(--color-text-secondary);font-style:italic;margin-bottom:6px;line-height:1.5}
-.vcard-divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:6px 0}
-.vcard-zh{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
-.vcard-ex{font-size:12px;color:var(--color-text-secondary);margin-bottom:2px}
-.vcard-practice{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:7px 9px;margin-top:7px}
-.vcard-practice-label{font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:3px}
-.vcard-practice-item{font-size:12px;color:var(--color-text-primary);margin-bottom:2px;line-height:1.5}
-.footer{font-size:12px;color:var(--color-text-secondary);margin-top:1rem;text-align:right}
 </style>
-<h2 class="sr-only">Lesson 1 vocabulary cards — 65 travel English words on greetings, introductions and airport check-in.</h2>
-<div class="hdr">
-<p class="hdr-title">Lesson 1 — Vocabulary Cards</p>
-<p class="hdr-sub">Greetings, Introductions &amp; Airport Check-In · 65 words · 5 categories</p>
+<div class="vc-wrap">
+  <div class="vc-header">Lesson 6 — Hotel Check-In &amp; Requests 🏨</div>
+  <div class="vc-sub">詞彙卡 · 65 words · 5 categories · English meaning · 繁體中文 · 2 examples · 2 practice sentences</div>
+  <div class="vc-controls">
+    <input class="vc-search" placeholder="Search English or 中文..." oninput="filterCards()">
+    <button class="vc-filter active" onclick="setGroup('all',this)">All</button>
+    <button class="vc-filter" onclick="setGroup('checkin',this)">Check-In 入住</button>
+    <button class="vc-filter" onclick="setGroup('room',this)">Room &amp; Facilities 房間設施</button>
+    <button class="vc-filter" onclick="setGroup('requests',this)">Requests &amp; Problems 要求與問題</button>
+    <button class="vc-filter" onclick="setGroup('staff',this)">Hotel Staff &amp; Services 服務人員</button>
+    <button class="vc-filter" onclick="setGroup('phrases',this)">Key Phrases 關鍵句</button>
+  </div>
+  <div class="vc-grid" id="grid">
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- CAT 1: CHECK-IN 入住 (13 words) coral -->
+    <!-- ══════════════════════════════════════════ -->
+
+    <div class="vcard" data-group="checkin" data-en="reservation" data-zh="預訂">
+      <div class="vcard-accent" style="background:#F0997B"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="14" y="16" width="52" height="48" rx="4" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+          <rect x="14" y="16" width="52" height="14" rx="4" fill="#F5C4B3" stroke="#D85A30" stroke-width="1.5"/>
+          <line x1="22" y1="38" x2="58" y2="38" stroke="#D85A30" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="22" y1="46" x2="58" y2="46" stroke="#F0997B" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="22" y1="54" x2="44" y2="54" stroke="#F0997B" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M50 48 L54 52 L62 42" fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg></div>
+        <div class="vcard-en">reservation</div>
+        <div class="vcard-pron">/ˌrɛzəˈveɪʃən/</div>
+        <div class="vcard-meaning">A reservation is a booking you make in advance to secure a hotel room. You give your name and dates when you make one.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">預訂</div>
+        <div class="vcard-ex">"I have a reservation under the name JP."</div>
+        <div class="vcard-ex">"Can I make a reservation for two nights?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I'd like to confirm my _______ for tonight.</div>
+          <div class="vcard-practice-item">2. Do you have a _______ in my name?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="checkin" data-en="check-in" data-zh="辦理入住">
+      <div class="vcard-accent" style="background:#F0997B"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="10" y="36" width="60" height="24" rx="3" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+          <rect x="18" y="24" width="14" height="14" rx="2" fill="#F5C4B3" stroke="#D85A30" stroke-width="1.2"/>
+          <circle cx="50" cy="26" r="8" fill="#F0997B" opacity=".3"/>
+          <circle cx="50" cy="26" r="4" fill="#D85A30"/>
+          <line x1="18" y1="44" x2="36" y2="44" stroke="#D85A30" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="18" y1="51" x2="30" y2="51" stroke="#F0997B" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="44" y1="44" x2="64" y2="44" stroke="#D85A30" stroke-width="1.2" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">check-in</div>
+        <div class="vcard-pron">/ˈtʃɛk ɪn/</div>
+        <div class="vcard-meaning">Check-in is the process of registering at the hotel and receiving your room key. It usually happens at the front desk.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">辦理入住</div>
+        <div class="vcard-ex">"I'd like to check in, please."</div>
+        <div class="vcard-ex">"What time is check-in at this hotel?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I arrived at 3pm to _______ to my room.</div>
+          <div class="vcard-practice-item">2. _______ time is at 2pm — please come after that.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="checkin" data-en="check-out" data-zh="退房">
+      <div class="vcard-accent" style="background:#F0997B"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="10" y="20" width="46" height="40" rx="4" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+          <rect x="10" y="20" width="46" height="12" rx="4" fill="#F5C4B3" stroke="#D85A30" stroke-width="1.5"/>
+          <line x1="18" y1="40" x2="46" y2="40" stroke="#D85A30" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="18" y1="47" x2="38" y2="47" stroke="#F0997B" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M58 38 L70 38 M64 32 L70 38 L64 44" fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg></div>
+        <div class="vcard-en">check-out</div>
+        <div class="vcard-pron">/ˈtʃɛk aʊt/</div>
+        <div class="vcard-meaning">Check-out is when you leave the hotel and return your room key. You also pay any remaining bill at this time.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">退房</div>
+        <div class="vcard-ex">"What time is check-out tomorrow?"</div>
+        <div class="vcard-ex">"I'd like to check out at 11am, please."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. _______ time is at noon — please be ready.</div>
+          <div class="vcard-practice-item">2. Can I do a late _______ until 2pm?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="checkin" data-en="room key / key card" data-zh="房卡 / 鑰匙">
+      <div class="vcard-accent" style="background:#F0997B"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="16" y="28" width="40" height="28" rx="4" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+          <rect x="20" y="32" width="14" height="10" rx="2" fill="#F5C4B3"/>
+          <circle cx="50" cy="40" r="5" fill="#D85A30" opacity=".4"/>
+          <circle cx="50" cy="40" r="2.5" fill="#D85A30"/>
+          <line x1="36" y1="16" x2="36" y2="28" stroke="#D85A30" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="30" y1="20" x2="42" y2="20" stroke="#D85A30" stroke-width="1.5" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">room key / key card</div>
+        <div class="vcard-pron">/ruːm kiː/ /kiː kɑːrd/</div>
+        <div class="vcard-meaning">A room key or key card is what you use to open your hotel room door. Modern hotels use plastic cards instead of metal keys.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">房卡 / 鑰匙</div>
+        <div class="vcard-ex">"Here is your key card for room 305."</div>
+        <div class="vcard-ex">"I lost my room key — can I get a new one?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I left my _______ inside the room by mistake.</div>
+          <div class="vcard-practice-item">2. Please return your _______ at check-out.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="checkin" data-en="ID / passport" data-zh="身份證 / 護照">
+      <div class="vcard-accent" style="background:#F0997B"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="12" y="18" width="56" height="38" rx="4" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+          <rect x="18" y="26" width="18" height="22" rx="2" fill="#F5C4B3"/>
+          <circle cx="27" cy="32" r="5" fill="#D85A30" opacity=".5"/>
+          <line x1="42" y1="28" x2="62" y2="28" stroke="#D85A30" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="42" y1="35" x2="62" y2="35" stroke="#F0997B" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="42" y1="42" x2="54" y2="42" stroke="#F0997B" stroke-width="1.2" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">ID / passport</div>
+        <div class="vcard-pron">/aɪ diː/ /ˈpæspɔːrt/</div>
+        <div class="vcard-meaning">Hotels ask for your ID or passport to verify who you are when you check in. You must show it at the front desk.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">身份證 / 護照</div>
+        <div class="vcard-ex">"May I see your passport, please?"</div>
+        <div class="vcard-ex">"I need to show my ID to check in."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. Please show your _______ at the front desk.</div>
+          <div class="vcard-practice-item">2. The hotel keeps a copy of your _______ for records.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="checkin" data-en="single / double room" data-zh="單人房 / 雙人房">
+      <div class="vcard-accent" style="background:#F0997B"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="10" y="36" width="26" height="18" rx="3" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+          <rect x="12" y="28" width="22" height="10" rx="2" fill="#F5C4B3" stroke="#D85A30" stroke-width="1.2"/>
+          <rect x="44" y="36" width="26" height="18" rx="3" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+          <rect x="46" y="28" width="10" height="10" rx="2" fill="#F5C4B3" stroke="#D85A30" stroke-width="1.2"/>
+          <rect x="58" y="28" width="10" height="10" rx="2" fill="#F5C4B3" stroke="#D85A30" stroke-width="1.2"/>
+          <line x1="36" y1="44" x2="44" y2="44" stroke="#B4B2A9" stroke-width="1" stroke-dasharray="3 2"/>
+        </svg></div>
+        <div class="vcard-en">single / double room</div>
+        <div class="vcard-pron">/ˈsɪŋɡl/ /ˈdʌbl ruːm/</div>
+        <div class="vcard-meaning">A single room has one bed for one person. A double room has a larger bed or two beds for two people.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">單人房 / 雙人房</div>
+        <div class="vcard-ex">"I'd like a double room for two nights."</div>
+        <div class="vcard-ex">"Do you have a single room available?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I need a _______ — I'm travelling alone.</div>
+          <div class="vcard-practice-item">2. We booked a _______ for my husband and me.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="checkin" data-en="floor / level" data-zh="樓層">
+      <div class="vcard-accent" style="background:#F0997B"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="20" y="14" width="40" height="10" rx="2" fill="#FAECE7" stroke="#D85A30" stroke-width="1.2"/>
+          <rect x="20" y="28" width="40" height="10" rx="2" fill="#F5C4B3" stroke="#D85A30" stroke-width="1.2"/>
+          <rect x="20" y="42" width="40" height="10" rx="2" fill="#FAECE7" stroke="#D85A30" stroke-width="1.2"/>
+          <rect x="20" y="56" width="40" height="10" rx="2" fill="#F5C4B3" stroke="#D85A30" stroke-width="1.2"/>
+          <line x1="14" y1="14" x2="14" y2="66" stroke="#D85A30" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="10" y1="19" x2="14" y2="19" stroke="#D85A30" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="10" y1="33" x2="14" y2="33" stroke="#D85A30" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="10" y1="47" x2="14" y2="47" stroke="#D85A30" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="10" y1="61" x2="14" y2="61" stroke="#D85A30" stroke-width="1.2" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">floor / level</div>
+        <div class="vcard-pron">/flɔːr/ /ˈlɛvəl/</div>
+        <div class="vcard-meaning">A floor or level is one storey of a building. Hotels number their floors starting from the ground or first floor.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">樓層</div>
+        <div class="vcard-ex">"Your room is on the 8th floor."</div>
+        <div class="vcard-ex">"The restaurant is on level 2."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. My room is on the 5th _______.</div>
+          <div class="vcard-practice-item">2. The swimming pool is on _______ B1.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="checkin" data-en="early check-in" data-zh="提早入住">
+      <div class="vcard-accent" style="background:#F0997B"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <circle cx="40" cy="38" r="22" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+          <line x1="40" y1="38" x2="40" y2="24" stroke="#8B2500" stroke-width="2" stroke-linecap="round"/>
+          <line x1="40" y1="38" x2="50" y2="32" stroke="#D85A30" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="40" cy="38" r="2.5" fill="#8B2500"/>
+          <path d="M28 18 L34 14 L40 18" fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg></div>
+        <div class="vcard-en">early check-in</div>
+        <div class="vcard-pron">/ˈɜːrli ˈtʃɛk ɪn/</div>
+        <div class="vcard-meaning">Early check-in means arriving at the hotel before the standard check-in time. Hotels may charge extra for this service.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">提早入住</div>
+        <div class="vcard-ex">"Is early check-in available today?"</div>
+        <div class="vcard-ex">"I'd like to request an early check-in at 10am."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. My flight arrives at 8am — can I arrange _______?</div>
+          <div class="vcard-practice-item">2. Is there an extra charge for _______?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="checkin" data-en="late check-out" data-zh="延遲退房">
+      <div class="vcard-accent" style="background:#F0997B"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <circle cx="40" cy="38" r="22" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+          <line x1="40" y1="38" x2="40" y2="24" stroke="#8B2500" stroke-width="2" stroke-linecap="round"/>
+          <line x1="40" y1="38" x2="54" y2="44" stroke="#D85A30" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="40" cy="38" r="2.5" fill="#8B2500"/>
+          <path d="M52 58 L58 54 L58 62" fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg></div>
+        <div class="vcard-en">late check-out</div>
+        <div class="vcard-pron">/leɪt ˈtʃɛk aʊt/</div>
+        <div class="vcard-meaning">Late check-out means leaving the hotel after the standard check-out time. You should request this the day before.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">延遲退房</div>
+        <div class="vcard-ex">"Can I have a late check-out until 2pm?"</div>
+        <div class="vcard-ex">"Late check-out is available for an extra fee."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I need a _______ — my flight is at 6pm.</div>
+          <div class="vcard-practice-item">2. The hotel allowed a free _______ until 1pm.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="checkin" data-en="reception / front desk" data-zh="前台 / 接待處">
+      <div class="vcard-accent" style="background:#F0997B"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="8" y="40" width="64" height="20" rx="3" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+          <rect x="20" y="26" width="14" height="16" rx="2" fill="#F5C4B3" stroke="#D85A30" stroke-width="1.2"/>
+          <circle cx="46" cy="30" r="8" fill="#FAECE7" stroke="#D85A30" stroke-width="1.2"/>
+          <circle cx="46" cy="27" r="4" fill="#F5C4B3"/>
+          <rect x="42" y="35" width="8" height="5" rx="1" fill="#F5C4B3"/>
+          <line x1="18" y1="48" x2="38" y2="48" stroke="#D85A30" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="48" y1="48" x2="66" y2="48" stroke="#D85A30" stroke-width="1.2" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">reception / front desk</div>
+        <div class="vcard-pron">/rɪˈsɛpʃən/ /frʌnt dɛsk/</div>
+        <div class="vcard-meaning">The reception or front desk is where hotel staff help guests with check-in, check-out, and requests. It is usually near the entrance.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">前台 / 接待處</div>
+        <div class="vcard-ex">"Please ask at reception for extra towels."</div>
+        <div class="vcard-ex">"The front desk is open 24 hours a day."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I need to go to _______ to get a new key.</div>
+          <div class="vcard-practice-item">2. Call the _______ if you need anything during the night.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="checkin" data-en="booking confirmation" data-zh="預訂確認書">
+      <div class="vcard-accent" style="background:#F0997B"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="16" y="14" width="48" height="52" rx="4" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+          <path d="M26 36 L32 42 L46 28" fill="none" stroke="#D85A30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="26" y1="52" x2="54" y2="52" stroke="#F0997B" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="26" y1="58" x2="46" y2="58" stroke="#F0997B" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="26" y1="22" x2="54" y2="22" stroke="#D85A30" stroke-width="1.2" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">booking confirmation</div>
+        <div class="vcard-pron">/ˈbʊkɪŋ ˌkɒnfəˈmeɪʃən/</div>
+        <div class="vcard-meaning">A booking confirmation is a document proving your reservation is accepted. Hotels may ask to see it at check-in.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">預訂確認書</div>
+        <div class="vcard-ex">"Here is my booking confirmation email."</div>
+        <div class="vcard-ex">"Please print your booking confirmation before arrival."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. The hotel asked me to show my _______ at check-in.</div>
+          <div class="vcard-practice-item">2. I received my _______ by email yesterday.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="checkin" data-en="lobby" data-zh="大廳">
+      <div class="vcard-accent" style="background:#F0997B"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="10" y="50" width="60" height="16" rx="2" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+          <rect x="10" y="14" width="60" height="8" rx="2" fill="#F5C4B3" stroke="#D85A30" stroke-width="1.2"/>
+          <line x1="10" y1="22" x2="10" y2="50" stroke="#D85A30" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="70" y1="22" x2="70" y2="50" stroke="#D85A30" stroke-width="1.5" stroke-linecap="round"/>
+          <rect x="20" y="36" width="12" height="14" rx="2" fill="#FAECE7" stroke="#D85A30" stroke-width="1"/>
+          <rect x="48" y="36" width="12" height="14" rx="2" fill="#FAECE7" stroke="#D85A30" stroke-width="1"/>
+          <rect x="33" y="40" width="14" height="10" rx="2" fill="#F5C4B3" stroke="#D85A30" stroke-width="1"/>
+          <rect x="26" y="28" width="28" height="8" rx="2" fill="#F5C4B3" stroke="#D85A30" stroke-width="1"/>
+        </svg></div>
+        <div class="vcard-en">lobby</div>
+        <div class="vcard-pron">/ˈlɒbi/</div>
+        <div class="vcard-meaning">The lobby is the large entrance area of a hotel. Guests walk through it when they arrive, and it usually has seating and the front desk.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">大廳</div>
+        <div class="vcard-ex">"I'll meet you in the lobby at 9am."</div>
+        <div class="vcard-ex">"Leave your luggage in the lobby after check-out."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. The hotel _______ has comfortable sofas to wait in.</div>
+          <div class="vcard-practice-item">2. We waited for our friends in the _______ downstairs.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="checkin" data-en="deposit" data-zh="押金">
+      <div class="vcard-accent" style="background:#F0997B"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="14" y="28" width="52" height="32" rx="5" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+          <rect x="14" y="28" width="52" height="12" rx="5" fill="#F5C4B3" stroke="#D85A30" stroke-width="1.5"/>
+          <circle cx="40" cy="52" r="6" fill="#D85A30" opacity=".3"/>
+          <line x1="40" y1="18" x2="40" y2="28" stroke="#D85A30" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M34 23 L40 17 L46 23" fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg></div>
+        <div class="vcard-en">deposit</div>
+        <div class="vcard-pron">/dɪˈpɒzɪt/</div>
+        <div class="vcard-meaning">A deposit is an amount of money you pay in advance as security when checking in. You get it back when you check out without damages.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">押金</div>
+        <div class="vcard-ex">"There is a 500 dollar deposit required."</div>
+        <div class="vcard-ex">"When will I receive my deposit back?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. The hotel requires a _______ of $200 at check-in.</div>
+          <div class="vcard-practice-item">2. I got my _______ back when I checked out safely.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- CAT 2: ROOM & FACILITIES 房間設施 (13) amber -->
+    <!-- ══════════════════════════════════════════ -->
+
+    <div class="vcard" data-group="room" data-en="air conditioning" data-zh="冷氣 / 空調">
+      <div class="vcard-accent" style="background:#EF9F27"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="10" y="22" width="60" height="22" rx="5" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1.5"/>
+          <rect x="10" y="22" width="60" height="8" rx="5" fill="#FAC775" stroke="#EF9F27" stroke-width="1.5"/>
+          <line x1="20" y1="52" x2="18" y2="66" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="30" y1="52" x2="30" y2="66" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="40" y1="52" x2="40" y2="66" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="50" y1="52" x2="50" y2="66" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="60" y1="52" x2="62" y2="66" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">air conditioning</div>
+        <div class="vcard-pron">/ɛr kənˈdɪʃənɪŋ/</div>
+        <div class="vcard-meaning">Air conditioning is a system that cools the air inside a room. You can usually control the temperature with a remote control.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">冷氣 / 空調</div>
+        <div class="vcard-ex">"Can you turn on the air conditioning?"</div>
+        <div class="vcard-ex">"The air conditioning in my room isn't working."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. It's very hot — please turn on the _______.</div>
+          <div class="vcard-practice-item">2. The _______ is broken — my room is too warm.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="room" data-en="Wi-Fi / internet" data-zh="無線網路">
+      <div class="vcard-accent" style="background:#EF9F27"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <path d="M12 42 Q40 16 68 42" fill="none" stroke="#EF9F27" stroke-width="2" stroke-linecap="round"/>
+          <path d="M22 52 Q40 34 58 52" fill="none" stroke="#EF9F27" stroke-width="2" stroke-linecap="round"/>
+          <path d="M32 62 Q40 52 48 62" fill="none" stroke="#EF9F27" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="40" cy="68" r="3.5" fill="#EF9F27"/>
+        </svg></div>
+        <div class="vcard-en">Wi-Fi / internet</div>
+        <div class="vcard-pron">/ˈwaɪ faɪ/ /ˈɪntərnɛt/</div>
+        <div class="vcard-meaning">Wi-Fi is a wireless internet connection in the hotel. You usually need a password to connect your phone or laptop.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">無線網路</div>
+        <div class="vcard-ex">"What is the Wi-Fi password?"</div>
+        <div class="vcard-ex">"Is the internet free in all rooms?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. Could you give me the _______ password?</div>
+          <div class="vcard-practice-item">2. The _______ in my room is very slow today.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="room" data-en="towel" data-zh="毛巾">
+      <div class="vcard-accent" style="background:#EF9F27"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="16" y="10" width="48" height="8" rx="3" fill="#FAC775" stroke="#EF9F27" stroke-width="1.5"/>
+          <path d="M16 18 Q16 66 40 66 Q64 66 64 18" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1.5"/>
+          <line x1="24" y1="34" x2="56" y2="34" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="24" y1="44" x2="56" y2="44" stroke="#FAC775" stroke-width="1" stroke-linecap="round"/>
+          <line x1="24" y1="54" x2="52" y2="54" stroke="#FAC775" stroke-width="1" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">towel</div>
+        <div class="vcard-pron">/ˈtaʊəl/</div>
+        <div class="vcard-meaning">A towel is a soft cloth used to dry yourself after a shower or bath. Hotels provide towels in the bathroom.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">毛巾</div>
+        <div class="vcard-ex">"Could I have some extra towels, please?"</div>
+        <div class="vcard-ex">"The towels in my bathroom need replacing."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. Can you send two more _______ to my room?</div>
+          <div class="vcard-practice-item">2. I used all my _______ — could you bring fresh ones?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="room" data-en="pillow / blanket" data-zh="枕頭 / 毯子">
+      <div class="vcard-accent" style="background:#EF9F27"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="10" y="40" width="60" height="26" rx="4" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1.5"/>
+          <rect x="18" y="28" width="22" height="14" rx="8" fill="#FAC775" stroke="#EF9F27" stroke-width="1.5"/>
+          <rect x="44" y="28" width="22" height="14" rx="8" fill="#FAC775" stroke="#EF9F27" stroke-width="1.5"/>
+          <line x1="10" y1="50" x2="70" y2="50" stroke="#EF9F27" stroke-width="1" opacity=".4"/>
+        </svg></div>
+        <div class="vcard-en">pillow / blanket</div>
+        <div class="vcard-pron">/ˈpɪloʊ/ /ˈblæŋkɪt/</div>
+        <div class="vcard-meaning">A pillow supports your head when you sleep. A blanket is a thick cover that keeps you warm in bed.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">枕頭 / 毯子</div>
+        <div class="vcard-ex">"Could I have an extra pillow, please?"</div>
+        <div class="vcard-ex">"I'm cold — can you bring me another blanket?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. My room only has one _______ — I need another.</div>
+          <div class="vcard-practice-item">2. The _______ is too thin for a cold night.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="room" data-en="bathroom / shower" data-zh="浴室 / 淋浴">
+      <div class="vcard-accent" style="background:#EF9F27"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="30" y="10" width="4" height="18" rx="2" fill="#FAC775" stroke="#EF9F27" stroke-width="1.2"/>
+          <path d="M34 10 Q40 6 46 10" fill="none" stroke="#EF9F27" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="24" y1="30" x2="24" y2="58" stroke="#EF9F27" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M24 30 Q32 28 46 10" fill="none" stroke="#EF9F27" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="36" x2="22" y2="40" stroke="#FAC775" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="28" y1="42" x2="22" y2="46" stroke="#FAC775" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="28" y1="48" x2="22" y2="52" stroke="#FAC775" stroke-width="1.2" stroke-linecap="round"/>
+          <rect x="10" y="56" width="60" height="12" rx="3" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1.2"/>
+        </svg></div>
+        <div class="vcard-en">bathroom / shower</div>
+        <div class="vcard-pron">/ˈbæθruːm/ /ˈʃaʊər/</div>
+        <div class="vcard-meaning">The bathroom is the room in a hotel with a toilet, sink, and shower or bathtub. A shower is the standing area where water flows from above.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">浴室 / 淋浴</div>
+        <div class="vcard-ex">"The bathroom in my room is very clean."</div>
+        <div class="vcard-ex">"The shower water is cold — can you fix it?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. The _______ drain is blocked — there's water everywhere.</div>
+          <div class="vcard-practice-item">2. My _______ doesn't have hot water this morning.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="room" data-en="minibar" data-zh="迷你吧 / 小冰箱">
+      <div class="vcard-accent" style="background:#EF9F27"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="18" y="18" width="44" height="50" rx="4" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1.5"/>
+          <rect x="18" y="18" width="44" height="22" rx="4" fill="#FAC775" stroke="#EF9F27" stroke-width="1.5"/>
+          <line x1="18" y1="40" x2="62" y2="40" stroke="#EF9F27" stroke-width="1.2"/>
+          <circle cx="57" cy="30" r="3" fill="#EF9F27"/>
+          <rect x="24" y="44" width="8" height="14" rx="2" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1"/>
+          <rect x="36" y="46" width="8" height="12" rx="2" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1"/>
+          <rect x="48" y="44" width="8" height="14" rx="2" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1"/>
+        </svg></div>
+        <div class="vcard-en">minibar</div>
+        <div class="vcard-pron">/ˈmɪniˌbɑːr/</div>
+        <div class="vcard-meaning">A minibar is a small refrigerator in your hotel room stocked with drinks and snacks. Items from it are charged to your bill.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">迷你吧 / 小冰箱</div>
+        <div class="vcard-ex">"Don't use the minibar — it's very expensive."</div>
+        <div class="vcard-ex">"I took a water from the minibar last night."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. Check the _______ — there should be cold drinks inside.</div>
+          <div class="vcard-practice-item">2. I accidentally used the _______ and got charged $15.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="room" data-en="safe / in-room safe" data-zh="保險箱">
+      <div class="vcard-accent" style="background:#EF9F27"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="14" y="20" width="52" height="44" rx="5" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1.5"/>
+          <rect x="22" y="28" width="28" height="20" rx="3" fill="#FAC775" stroke="#EF9F27" stroke-width="1.2"/>
+          <circle cx="52" cy="42" r="5" fill="#EF9F27" opacity=".4"/>
+          <circle cx="52" cy="42" r="2.5" fill="#EF9F27"/>
+          <line x1="32" y1="33" x2="40" y2="43" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="40" y1="33" x2="32" y2="43" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">safe / in-room safe</div>
+        <div class="vcard-pron">/seɪf/ /ɪn ruːm seɪf/</div>
+        <div class="vcard-meaning">A safe is a lockable metal box in the hotel room for storing valuables. You set your own PIN code to keep it secure.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">保險箱</div>
+        <div class="vcard-ex">"I put my passport in the room safe."</div>
+        <div class="vcard-ex">"How do I set the PIN for the in-room safe?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. Keep your valuables in the _______ when you go out.</div>
+          <div class="vcard-practice-item">2. I forgot my _______ PIN — can housekeeping help?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="room" data-en="balcony / view" data-zh="陽台 / 景觀">
+      <div class="vcard-accent" style="background:#EF9F27"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="10" y="20" width="60" height="36" rx="3" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1.5"/>
+          <path d="M10 32 Q40 18 70 32" fill="#FAC775" stroke="#EF9F27" stroke-width="1.2"/>
+          <rect x="22" y="24" width="14" height="16" rx="2" fill="#E6F1FB"/>
+          <rect x="44" y="24" width="14" height="16" rx="2" fill="#E6F1FB"/>
+          <rect x="10" y="54" width="60" height="12" rx="2" fill="#FAC775" stroke="#EF9F27" stroke-width="1.2"/>
+          <line x1="22" y1="56" x2="22" y2="66" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="35" y1="56" x2="35" y2="66" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="48" y1="56" x2="48" y2="66" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="61" y1="56" x2="61" y2="66" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">balcony / view</div>
+        <div class="vcard-pron">/ˈbælkəni/ /vjuː/</div>
+        <div class="vcard-meaning">A balcony is an outdoor platform outside your room where you can stand and enjoy fresh air. A view refers to what you can see from the room or balcony.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">陽台 / 景觀</div>
+        <div class="vcard-ex">"My room has a beautiful ocean view."</div>
+        <div class="vcard-ex">"Can I have a room with a balcony?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I enjoyed my morning coffee on the _______.</div>
+          <div class="vcard-practice-item">2. The _______ from my window was amazing — mountains everywhere.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="room" data-en="elevator / lift" data-zh="電梯">
+      <div class="vcard-accent" style="background:#EF9F27"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="20" y="14" width="40" height="54" rx="4" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1.5"/>
+          <rect x="26" y="20" width="12" height="40" rx="2" fill="#FAC775" stroke="#EF9F27" stroke-width="1"/>
+          <rect x="42" y="20" width="12" height="40" rx="2" fill="#FAC775" stroke="#EF9F27" stroke-width="1"/>
+          <path d="M29 34 L32 30 L35 34" fill="none" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M29 42 L32 46 L35 42" fill="none" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="57" cy="36" r="3" fill="#EF9F27" opacity=".5"/>
+          <circle cx="57" cy="46" r="3" fill="#EF9F27" opacity=".5"/>
+        </svg></div>
+        <div class="vcard-en">elevator / lift</div>
+        <div class="vcard-pron">/ˈɛlɪveɪtər/ /lɪft/</div>
+        <div class="vcard-meaning">An elevator or lift is a machine that carries people between floors inside a building. Press your floor number to go up or down.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">電梯</div>
+        <div class="vcard-ex">"The elevator is next to the reception."</div>
+        <div class="vcard-ex">"Take the lift to the 10th floor."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. The _______ is broken — I had to use the stairs.</div>
+          <div class="vcard-practice-item">2. Where is the _______ to get to my room on floor 12?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="room" data-en="housekeeping" data-zh="客房清潔服務">
+      <div class="vcard-accent" style="background:#EF9F27"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <circle cx="40" cy="22" r="10" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1.5"/>
+          <path d="M26 60 Q26 40 40 38 Q54 40 54 60" fill="#FAC775" stroke="#EF9F27" stroke-width="1.5"/>
+          <path d="M50 48 Q58 46 62 54" fill="none" stroke="#EF9F27" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M62 54 L68 58 L62 62" fill="none" stroke="#EF9F27" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg></div>
+        <div class="vcard-en">housekeeping</div>
+        <div class="vcard-pron">/ˈhaʊsˌkiːpɪŋ/</div>
+        <div class="vcard-meaning">Housekeeping is the hotel service that cleans rooms and changes towels and bedding. You can hang a "do not disturb" sign if you don't want them to enter.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">客房清潔服務</div>
+        <div class="vcard-ex">"Housekeeping cleaned my room while I was out."</div>
+        <div class="vcard-ex">"Can housekeeping come at 10am tomorrow?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. Please ask _______ to bring extra shampoo.</div>
+          <div class="vcard-practice-item">2. I put the "do not disturb" sign so _______ didn't come in.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="room" data-en="bed sheet / linen" data-zh="床單 / 床鋪用品">
+      <div class="vcard-accent" style="background:#EF9F27"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="10" y="40" width="60" height="24" rx="4" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1.5"/>
+          <rect x="10" y="40" width="60" height="10" rx="4" fill="#FAC775" stroke="#EF9F27" stroke-width="1.5"/>
+          <rect x="16" y="26" width="20" height="16" rx="8" fill="#FAC775" stroke="#EF9F27" stroke-width="1.5"/>
+          <rect x="44" y="26" width="20" height="16" rx="8" fill="#FAC775" stroke="#EF9F27" stroke-width="1.5"/>
+        </svg></div>
+        <div class="vcard-en">bed sheet / linen</div>
+        <div class="vcard-pron">/bɛd ʃiːt/ /ˈlɪnɪn/</div>
+        <div class="vcard-meaning">A bed sheet is the flat fabric cover placed on a mattress. Hotel linen refers to all bed and bath fabrics such as sheets and towels.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">床單 / 床鋪用品</div>
+        <div class="vcard-ex">"Can you change the bed sheets, please?"</div>
+        <div class="vcard-ex">"The linen smells fresh — great hotel service."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. Please replace the _______ — they have a stain.</div>
+          <div class="vcard-practice-item">2. The hotel changes the _______ every two days.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="room" data-en="do not disturb" data-zh="請勿打擾">
+      <div class="vcard-accent" style="background:#EF9F27"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <path d="M20 28 L20 62 L60 62 L60 36 L44 28 Z" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="20" cy="28" r="6" fill="#EF9F27"/>
+          <line x1="16" y1="24" x2="24" y2="32" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <line x1="24" y1="24" x2="16" y2="32" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <line x1="30" y1="44" x2="52" y2="44" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="30" y1="52" x2="48" y2="52" stroke="#FAC775" stroke-width="1.2" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">do not disturb</div>
+        <div class="vcard-pron">/duː nɒt dɪˈstɜːrb/</div>
+        <div class="vcard-meaning">A "do not disturb" sign is hung on the door handle to tell hotel staff not to enter. Use it when you are sleeping or need privacy.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">請勿打擾</div>
+        <div class="vcard-ex">"I hung the do not disturb sign on the door."</div>
+        <div class="vcard-ex">"Please don't knock — the do not disturb sign is up."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I put the _______ sign out — I need to sleep in.</div>
+          <div class="vcard-practice-item">2. The _______ sign was on, so housekeeping didn't enter.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- CAT 3: REQUESTS & PROBLEMS (13) purple -->
+    <!-- ══════════════════════════════════════════ -->
+
+    <div class="vcard" data-group="requests" data-en="complaint" data-zh="投訴 / 抱怨">
+      <div class="vcard-accent" style="background:#AFA9EC"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <path d="M14 16 Q14 10 20 10 L56 10 Q62 10 62 16 L62 44 Q62 50 56 50 L44 50 L36 62 L36 50 L20 50 Q14 50 14 44 Z" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5" stroke-linejoin="round"/>
+          <line x1="28" y1="26" x2="52" y2="26" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="28" y1="34" x2="52" y2="34" stroke="#AFA9EC" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="36" y1="42" x2="44" y2="42" stroke="#534AB7" stroke-width="2" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">complaint</div>
+        <div class="vcard-pron">/kəmˈpleɪnt/</div>
+        <div class="vcard-meaning">A complaint is when you tell the hotel that something is wrong or you are not satisfied. You make a complaint at the front desk.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">投訴 / 抱怨</div>
+        <div class="vcard-ex">"I'd like to make a complaint about the noise."</div>
+        <div class="vcard-ex">"The front desk handled my complaint very well."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I need to make a _______ about my dirty room.</div>
+          <div class="vcard-practice-item">2. She filed a _______ because the hot water wasn't working.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="requests" data-en="broken / not working" data-zh="壞掉的 / 故障">
+      <div class="vcard-accent" style="background:#AFA9EC"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="16" y="24" width="48" height="32" rx="5" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5"/>
+          <path d="M30 32 L38 40 L34 44 L42 52" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="52" y1="20" x2="58" y2="14" stroke="#F0997B" stroke-width="2" stroke-linecap="round"/>
+          <line x1="58" y1="20" x2="52" y2="14" stroke="#F0997B" stroke-width="2" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">broken / not working</div>
+        <div class="vcard-pron">/ˈbroʊkən/ /nɒt ˈwɜːrkɪŋ/</div>
+        <div class="vcard-meaning">Something broken or not working has stopped functioning properly. Report it to the front desk so the hotel can fix or replace it.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">壞掉的 / 故障</div>
+        <div class="vcard-ex">"The TV in my room is broken."</div>
+        <div class="vcard-ex">"The hot water is not working — please send someone."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. The light in my bathroom is _______ — can you fix it?</div>
+          <div class="vcard-practice-item">2. The air conditioning is _______ and the room is very hot.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="requests" data-en="noisy / noise" data-zh="吵鬧 / 噪音">
+      <div class="vcard-accent" style="background:#AFA9EC"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <path d="M24 34 L24 46 L34 46 L44 56 L44 24 L34 34 Z" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M50 32 Q58 40 50 48" fill="none" stroke="#534AB7" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M54 26 Q66 40 54 54" fill="none" stroke="#AFA9EC" stroke-width="1.5" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">noisy / noise</div>
+        <div class="vcard-pron">/ˈnɔɪzi/ /nɔɪz/</div>
+        <div class="vcard-meaning">Noisy means there is too much loud sound and it is difficult to sleep or relax. Noise is the unwanted loud sound itself.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">吵鬧 / 噪音</div>
+        <div class="vcard-ex">"My room is too noisy — people are loud next door."</div>
+        <div class="vcard-ex">"There is a lot of noise from the street outside."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I can't sleep because the room next door is too _______.</div>
+          <div class="vcard-practice-item">2. The _______ from the construction woke me up at 7am.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="requests" data-en="upgrade" data-zh="升級 / 升等">
+      <div class="vcard-accent" style="background:#AFA9EC"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="16" y="46" width="20" height="20" rx="3" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.2"/>
+          <rect x="44" y="30" width="20" height="36" rx="3" fill="#AFA9EC" stroke="#534AB7" stroke-width="1.5"/>
+          <path d="M26 34 L26 46" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 2"/>
+          <path d="M20 40 L26 34 L32 40" fill="none" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg></div>
+        <div class="vcard-en">upgrade</div>
+        <div class="vcard-pron">/ˈʌpɡreɪd/</div>
+        <div class="vcard-meaning">An upgrade means moving to a better, larger, or higher-floor room than you originally booked. Hotels sometimes offer this for free.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">升級 / 升等</div>
+        <div class="vcard-ex">"We were given a free upgrade to a suite!"</div>
+        <div class="vcard-ex">"Is there a room upgrade available today?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. The hotel offered us a free _______ to a sea-view room.</div>
+          <div class="vcard-practice-item">2. Can I _______ my room to a suite for one more night?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="requests" data-en="extra / additional" data-zh="額外的 / 附加的">
+      <div class="vcard-accent" style="background:#AFA9EC"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="16" y="16" width="22" height="22" rx="3" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5"/>
+          <rect x="42" y="16" width="22" height="22" rx="3" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5"/>
+          <rect x="16" y="42" width="22" height="22" rx="3" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5"/>
+          <rect x="42" y="42" width="22" height="22" rx="3" fill="#AFA9EC" stroke="#534AB7" stroke-width="1.5"/>
+          <line x1="53" y1="48" x2="53" y2="58" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <line x1="48" y1="53" x2="58" y2="53" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">extra / additional</div>
+        <div class="vcard-pron">/ˈɛkstrə/ /əˈdɪʃənl/</div>
+        <div class="vcard-meaning">Extra or additional means more than what was included in your original booking. Hotels may charge for extra services or items.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">額外的 / 附加的</div>
+        <div class="vcard-ex">"Can I get an extra bed for my child?"</div>
+        <div class="vcard-ex">"Are there any additional charges I should know about?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. Could you send an _______ blanket to my room?</div>
+          <div class="vcard-practice-item">2. The hotel charged an _______ fee for parking.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="requests" data-en="wake-up call" data-zh="叫醒服務">
+      <div class="vcard-accent" style="background:#AFA9EC"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="22" y="26" width="36" height="30" rx="5" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5"/>
+          <circle cx="40" cy="41" r="8" fill="#AFA9EC" stroke="#534AB7" stroke-width="1.2"/>
+          <line x1="40" y1="41" x2="40" y2="35" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="40" y1="41" x2="45" y2="43" stroke="#7F77DD" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M16 26 Q14 18 22 16" fill="none" stroke="#7F77DD" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M64 26 Q66 18 58 16" fill="none" stroke="#7F77DD" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="36" y1="56" x2="44" y2="56" stroke="#7F77DD" stroke-width="1.5" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">wake-up call</div>
+        <div class="vcard-pron">/ˈweɪk ʌp kɔːl/</div>
+        <div class="vcard-meaning">A wake-up call is when the hotel phones your room at a set time to wake you up. You can request one at the front desk.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">叫醒服務</div>
+        <div class="vcard-ex">"Can I have a wake-up call at 6am?"</div>
+        <div class="vcard-ex">"I requested a wake-up call for my early flight."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. Please arrange a _______ for 5:30am tomorrow.</div>
+          <div class="vcard-practice-item">2. The _______ woke me up just in time for breakfast.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="requests" data-en="laundry service" data-zh="洗衣服務">
+      <div class="vcard-accent" style="background:#AFA9EC"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="14" y="22" width="52" height="44" rx="5" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5"/>
+          <circle cx="40" cy="48" r="16" fill="#CECBF6" stroke="#7F77DD" stroke-width="1.2"/>
+          <circle cx="40" cy="48" r="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
+          <circle cx="28" cy="30" r="4" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1"/>
+          <line x1="14" y1="36" x2="66" y2="36" stroke="#7F77DD" stroke-width="1.2"/>
+        </svg></div>
+        <div class="vcard-en">laundry service</div>
+        <div class="vcard-pron">/ˈlɔːndri ˈsɜːrvɪs/</div>
+        <div class="vcard-meaning">Laundry service is when the hotel washes and folds your clothes for you. You leave your clothes in a bag and they return them clean.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">洗衣服務</div>
+        <div class="vcard-ex">"Does this hotel offer laundry service?"</div>
+        <div class="vcard-ex">"I sent my shirts to the laundry service."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I used the _______ because I ran out of clean clothes.</div>
+          <div class="vcard-practice-item">2. How much does the _______ cost per item?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="requests" data-en="room service" data-zh="客房服務">
+      <div class="vcard-accent" style="background:#AFA9EC"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <ellipse cx="40" cy="46" rx="28" ry="8" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5"/>
+          <ellipse cx="40" cy="40" rx="28" ry="8" fill="#CECBF6" stroke="#534AB7" stroke-width="1.2"/>
+          <ellipse cx="40" cy="32" rx="20" ry="6" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.2"/>
+          <path d="M28 32 Q40 18 52 32" fill="#AFA9EC" stroke="#534AB7" stroke-width="1.2"/>
+          <line x1="40" y1="18" x2="40" y2="26" stroke="#534AB7" stroke-width="1.2" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">room service</div>
+        <div class="vcard-pron">/ruːm ˈsɜːrvɪs/</div>
+        <div class="vcard-meaning">Room service is when the hotel delivers food and drinks directly to your room. You order by phone or through a menu in the room.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">客房服務</div>
+        <div class="vcard-ex">"I ordered room service for breakfast."</div>
+        <div class="vcard-ex">"Is room service available after midnight?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I was too tired to go out so I ordered _______.</div>
+          <div class="vcard-practice-item">2. The _______ menu is on the desk next to the TV.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="requests" data-en="maintenance" data-zh="維修">
+      <div class="vcard-accent" style="background:#AFA9EC"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <path d="M46 16 Q58 10 64 22 L52 34 L46 28 Z" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M46 28 L22 52 Q18 58 24 64 Q30 70 36 66 L60 42 L54 36 Z" fill="#AFA9EC" stroke="#534AB7" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="28" cy="58" r="4" fill="#534AB7"/>
+        </svg></div>
+        <div class="vcard-en">maintenance</div>
+        <div class="vcard-pron">/ˈmeɪntənəns/</div>
+        <div class="vcard-meaning">Maintenance refers to the hotel team that repairs broken things in your room. Call reception to send a maintenance person when something is faulty.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">維修</div>
+        <div class="vcard-ex">"Maintenance fixed the shower in 30 minutes."</div>
+        <div class="vcard-ex">"I called reception to request a maintenance visit."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. Can you send _______ to fix the broken lock?</div>
+          <div class="vcard-practice-item">2. The _______ team arrived quickly to repair the leak.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="requests" data-en="refund" data-zh="退款">
+      <div class="vcard-accent" style="background:#AFA9EC"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="14" y="28" width="52" height="32" rx="5" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5"/>
+          <rect x="14" y="28" width="52" height="12" rx="5" fill="#AFA9EC" stroke="#534AB7" stroke-width="1.5"/>
+          <path d="M36 50 L32 46 L36 42 M32 46 L48 46" fill="none" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg></div>
+        <div class="vcard-en">refund</div>
+        <div class="vcard-pron">/ˈriːfʌnd/</div>
+        <div class="vcard-meaning">A refund is money returned to you when a service was unsatisfactory or you cancelled a booking. You request it at the front desk.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">退款</div>
+        <div class="vcard-ex">"I'd like a refund for the damaged room."</div>
+        <div class="vcard-ex">"When will I receive the refund to my card?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I asked for a _______ because the room was dirty.</div>
+          <div class="vcard-practice-item">2. The hotel processed my _______ within three days.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="requests" data-en="change room" data-zh="換房間">
+      <div class="vcard-accent" style="background:#AFA9EC"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="8" y="28" width="26" height="34" rx="3" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5"/>
+          <rect x="46" y="28" width="26" height="34" rx="3" fill="#AFA9EC" stroke="#534AB7" stroke-width="1.5"/>
+          <path d="M34 38 L46 38 M42 32 L46 38 L42 44" fill="none" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="16" y="40" width="10" height="14" rx="2" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1"/>
+          <rect x="54" y="40" width="10" height="14" rx="2" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
+        </svg></div>
+        <div class="vcard-en">change room</div>
+        <div class="vcard-pron">/tʃeɪndʒ ruːm/</div>
+        <div class="vcard-meaning">To change room means to move from one hotel room to a different one. You might request this if there is a problem with your current room.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">換房間</div>
+        <div class="vcard-ex">"Can I change rooms? Mine is too noisy."</div>
+        <div class="vcard-ex">"The hotel let us change rooms to a quieter floor."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I asked to _______ because the shower was broken.</div>
+          <div class="vcard-practice-item">2. Is it possible to _______ to one with a better view?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="requests" data-en="extend stay" data-zh="延長住宿">
+      <div class="vcard-accent" style="background:#AFA9EC"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="12" y="18" width="56" height="46" rx="4" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5"/>
+          <rect x="12" y="18" width="56" height="14" rx="4" fill="#AFA9EC" stroke="#534AB7" stroke-width="1.5"/>
+          <line x1="24" y1="12" x2="24" y2="24" stroke="#534AB7" stroke-width="2" stroke-linecap="round"/>
+          <line x1="56" y1="12" x2="56" y2="24" stroke="#534AB7" stroke-width="2" stroke-linecap="round"/>
+          <line x1="22" y1="42" x2="58" y2="42" stroke="#7F77DD" stroke-width="1" stroke-dasharray="4 2"/>
+          <path d="M50 50 L56 50 M56 50 L56 58 M56 58 L62 58" fill="none" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg></div>
+        <div class="vcard-en">extend stay</div>
+        <div class="vcard-pron">/ɪkˈstɛnd steɪ/</div>
+        <div class="vcard-meaning">To extend your stay means to book extra nights at the hotel beyond your original departure date. Ask at reception as early as possible.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">延長住宿</div>
+        <div class="vcard-ex">"I'd like to extend my stay by one more night."</div>
+        <div class="vcard-ex">"Can I extend my stay until Friday?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I love this hotel — can I _______ for two more days?</div>
+          <div class="vcard-practice-item">2. My plans changed so I asked to _______ my booking.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- CAT 4: HOTEL STAFF & SERVICES (13) teal -->
+    <!-- ══════════════════════════════════════════ -->
+
+    <div class="vcard" data-group="staff" data-en="concierge" data-zh="行李員 / 服務員">
+      <div class="vcard-accent" style="background:#5DCAA5"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <circle cx="40" cy="22" r="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
+          <path d="M26 62 Q26 42 40 40 Q54 42 54 62" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1.5"/>
+          <rect x="32" y="40" width="16" height="6" rx="2" fill="#1D9E75" opacity=".4"/>
+          <line x1="34" y1="50" x2="46" y2="50" stroke="#1D9E75" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="34" y1="56" x2="46" y2="56" stroke="#9FE1CB" stroke-width="1.2" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">concierge</div>
+        <div class="vcard-pron">/ˌkɒnsiˈɛərʒ/</div>
+        <div class="vcard-meaning">A concierge is a hotel staff member who helps guests with special requests and local recommendations. They can book tours, taxis, and restaurants for you.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">行李員 / 服務員</div>
+        <div class="vcard-ex">"Ask the concierge to book a restaurant for tonight."</div>
+        <div class="vcard-ex">"The concierge recommended a great night market."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I asked the _______ to arrange a taxi to the airport.</div>
+          <div class="vcard-practice-item">2. The _______ gave me a map of the local area.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="staff" data-en="porter / bellboy" data-zh="行李員">
+      <div class="vcard-accent" style="background:#5DCAA5"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <circle cx="36" cy="20" r="9" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
+          <path d="M24 60 Q24 40 36 38 Q48 40 48 60" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1.5"/>
+          <rect x="50" y="34" width="18" height="26" rx="4" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
+          <line x1="59" y1="28" x2="59" y2="34" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="54" y1="42" x2="64" y2="42" stroke="#1D9E75" stroke-width="1" stroke-linecap="round"/>
+          <line x1="54" y1="48" x2="64" y2="48" stroke="#9FE1CB" stroke-width="1" stroke-linecap="round"/>
+          <line x1="44" y1="46" x2="50" y2="50" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">porter / bellboy</div>
+        <div class="vcard-pron">/ˈpɔːrtər/ /ˈbɛlbɔɪ/</div>
+        <div class="vcard-meaning">A porter or bellboy is a hotel staff member who carries your luggage to and from your room. They often meet you at the entrance.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">行李員</div>
+        <div class="vcard-ex">"The porter helped carry my bags to room 504."</div>
+        <div class="vcard-ex">"The bellboy will take your luggage upstairs."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. The _______ greeted me at the door and took my bags.</div>
+          <div class="vcard-practice-item">2. Please give the _______ a tip after he brings your luggage.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="staff" data-en="breakfast buffet" data-zh="早餐自助餐">
+      <div class="vcard-accent" style="background:#5DCAA5"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="8" y="44" width="64" height="16" rx="3" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
+          <ellipse cx="22" cy="44" rx="10" ry="6" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1.2"/>
+          <ellipse cx="40" cy="44" rx="10" ry="6" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1.2"/>
+          <ellipse cx="58" cy="44" rx="10" ry="6" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1.2"/>
+          <path d="M16 44 Q22 30 28 44" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.2"/>
+          <path d="M34 44 Q40 26 46 44" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.2"/>
+        </svg></div>
+        <div class="vcard-en">breakfast buffet</div>
+        <div class="vcard-pron">/ˈbrɛkfəst ˈbʊfeɪ/</div>
+        <div class="vcard-meaning">A breakfast buffet is a self-serve morning meal at the hotel where you choose from many dishes. It is often included in your room price.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">早餐自助餐</div>
+        <div class="vcard-ex">"Breakfast buffet is served from 7 to 10am."</div>
+        <div class="vcard-ex">"Is the breakfast buffet included in the room rate?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I had eggs and fruit at the _______ this morning.</div>
+          <div class="vcard-practice-item">2. The _______ starts at 6:30am on weekdays.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="staff" data-en="luggage storage" data-zh="行李寄存">
+      <div class="vcard-accent" style="background:#5DCAA5"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="10" y="26" width="60" height="38" rx="4" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
+          <rect x="18" y="32" width="16" height="24" rx="3" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1.2"/>
+          <rect x="38" y="32" width="16" height="24" rx="3" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1.2"/>
+          <rect x="22" y="20" width="8" height="8" rx="2" fill="none" stroke="#1D9E75" stroke-width="1.5"/>
+          <rect x="42" y="20" width="8" height="8" rx="2" fill="none" stroke="#1D9E75" stroke-width="1.5"/>
+        </svg></div>
+        <div class="vcard-en">luggage storage</div>
+        <div class="vcard-pron">/ˈlʌɡɪdʒ ˈstɔːrɪdʒ/</div>
+        <div class="vcard-meaning">Luggage storage is a secure area at the hotel where you can leave your bags before check-in or after check-out. It is usually free.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">行李寄存</div>
+        <div class="vcard-ex">"Can I leave my bags in luggage storage until 6pm?"</div>
+        <div class="vcard-ex">"The luggage storage is near the lobby entrance."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I used _______ while I went sightseeing on my last day.</div>
+          <div class="vcard-practice-item">2. Is there a fee for the _______?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="staff" data-en="valet parking" data-zh="代客停車">
+      <div class="vcard-accent" style="background:#5DCAA5"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="10" y="38" width="50" height="18" rx="4" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
+          <rect x="18" y="26" width="32" height="14" rx="3" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1.5"/>
+          <circle cx="20" cy="58" r="5" fill="#444441"/>
+          <circle cx="20" cy="58" r="2.5" fill="#B4B2A9"/>
+          <circle cx="54" cy="58" r="5" fill="#444441"/>
+          <circle cx="54" cy="58" r="2.5" fill="#B4B2A9"/>
+          <circle cx="62" cy="32" r="7" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
+          <circle cx="62" cy="30" r="3.5" fill="#9FE1CB"/>
+          <rect x="58" y="34" width="8" height="4" rx="1" fill="#9FE1CB"/>
+        </svg></div>
+        <div class="vcard-en">valet parking</div>
+        <div class="vcard-pron">/ˈvæleɪ ˈpɑːrkɪŋ/</div>
+        <div class="vcard-meaning">Valet parking is a service where hotel staff park your car for you. You hand them your keys at the entrance and they return the car when needed.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">代客停車</div>
+        <div class="vcard-ex">"Valet parking is available at the main entrance."</div>
+        <div class="vcard-ex">"How much does valet parking cost per night?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I used the _______ service — it was very convenient.</div>
+          <div class="vcard-practice-item">2. Hand your keys to the staff for _______.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="staff" data-en="gym / fitness centre" data-zh="健身房">
+      <div class="vcard-accent" style="background:#5DCAA5"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="8" y="36" width="14" height="8" rx="3" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1.5"/>
+          <rect x="58" y="36" width="14" height="8" rx="3" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1.5"/>
+          <rect x="18" y="30" width="10" height="20" rx="3" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
+          <rect x="52" y="30" width="10" height="20" rx="3" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
+          <rect x="28" y="38" width="24" height="4" rx="2" fill="#1D9E75"/>
+          <circle cx="30" cy="22" r="6" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.2"/>
+          <line x1="30" y1="28" x2="30" y2="38" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">gym / fitness centre</div>
+        <div class="vcard-pron">/dʒɪm/ /ˈfɪtnɪs ˈsɛntər/</div>
+        <div class="vcard-meaning">A gym or fitness centre is a room in the hotel with exercise equipment. It is usually free to use for hotel guests.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">健身房</div>
+        <div class="vcard-ex">"Where is the gym? I'd like to exercise this morning."</div>
+        <div class="vcard-ex">"The fitness centre is open from 6am to 10pm."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. Is the _______ included in the room price?</div>
+          <div class="vcard-practice-item">2. I went to the _______ every morning during my stay.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="staff" data-en="swimming pool" data-zh="游泳池">
+      <div class="vcard-accent" style="background:#5DCAA5"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="10" y="34" width="60" height="30" rx="4" fill="#B5D4F4" stroke="#378ADD" stroke-width="1.5"/>
+          <path d="M10 46 Q25 40 40 46 Q55 52 70 46" fill="none" stroke="#378ADD" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M10 54 Q25 48 40 54 Q55 60 70 54" fill="none" stroke="#85B7EB" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="16" y1="28" x2="16" y2="34" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="64" y1="28" x2="64" y2="34" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="16" y1="28" x2="64" y2="28" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">swimming pool</div>
+        <div class="vcard-pron">/ˈswɪmɪŋ puːl/</div>
+        <div class="vcard-meaning">A swimming pool is a large water area in the hotel where guests can swim and relax. It is often outdoors or on the rooftop.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">游泳池</div>
+        <div class="vcard-ex">"The swimming pool is on the rooftop level."</div>
+        <div class="vcard-ex">"What are the swimming pool opening hours?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I spent the afternoon relaxing by the _______.</div>
+          <div class="vcard-practice-item">2. Is there a heated _______ at this hotel?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="staff" data-en="hotel shuttle" data-zh="飯店接駁車">
+      <div class="vcard-accent" style="background:#5DCAA5"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="8" y="32" width="58" height="24" rx="5" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
+          <rect x="14" y="22" width="38" height="12" rx="3" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1.5"/>
+          <rect x="18" y="25" width="10" height="8" rx="1" fill="#E6F1FB"/>
+          <rect x="32" y="25" width="10" height="8" rx="1" fill="#E6F1FB"/>
+          <circle cx="22" cy="58" r="5" fill="#444441"/>
+          <circle cx="22" cy="58" r="2.5" fill="#B4B2A9"/>
+          <circle cx="54" cy="58" r="5" fill="#444441"/>
+          <circle cx="54" cy="58" r="2.5" fill="#B4B2A9"/>
+          <rect x="60" y="36" width="8" height="14" rx="3" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1"/>
+        </svg></div>
+        <div class="vcard-en">hotel shuttle</div>
+        <div class="vcard-pron">/hoʊˈtɛl ˈʃʌtl/</div>
+        <div class="vcard-meaning">A hotel shuttle is a bus or van that takes guests between the hotel and the airport or city centre. It is often free for hotel guests.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">飯店接駁車</div>
+        <div class="vcard-ex">"Does the hotel offer a free airport shuttle?"</div>
+        <div class="vcard-ex">"The hotel shuttle leaves every 30 minutes."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I took the _______ to avoid paying for a taxi.</div>
+          <div class="vcard-practice-item">2. What time does the _______ depart for the airport?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="staff" data-en="tip / gratuity" data-zh="小費">
+      <div class="vcard-accent" style="background:#5DCAA5"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <path d="M26 58 Q22 46 28 38 L36 34 L42 40 L38 48 L46 44 L54 46 L56 54 Q50 62 40 64 Z" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="52" cy="26" r="14" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1.5"/>
+          <line x1="52" y1="20" x2="52" y2="32" stroke="#085041" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="46" y1="26" x2="58" y2="26" stroke="#085041" stroke-width="1.5" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">tip / gratuity</div>
+        <div class="vcard-pron">/tɪp/ /ɡrəˈtjuːɪti/</div>
+        <div class="vcard-meaning">A tip or gratuity is extra money you give hotel staff to thank them for good service. It is optional but appreciated in most countries.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">小費</div>
+        <div class="vcard-ex">"I gave the porter a small tip."</div>
+        <div class="vcard-ex">"Is tipping expected at this hotel?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I left a _______ for the housekeeper on the desk.</div>
+          <div class="vcard-practice-item">2. The service was excellent so I gave a generous _______.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="staff" data-en="complimentary" data-zh="免費提供的">
+      <div class="vcard-accent" style="background:#5DCAA5"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="14" y="28" width="52" height="32" rx="5" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
+          <path d="M28 28 Q28 16 40 16 Q52 16 52 28" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1.5"/>
+          <path d="M32 42 L38 48 L50 34" fill="none" stroke="#085041" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="14" y1="38" x2="66" y2="38" stroke="#1D9E75" stroke-width="1" stroke-dasharray="4 3"/>
+        </svg></div>
+        <div class="vcard-en">complimentary</div>
+        <div class="vcard-pron">/ˌkɒmplɪˈmɛntəri/</div>
+        <div class="vcard-meaning">Complimentary means it is provided for free by the hotel as a gift or included in your booking. Common complimentary items include water and breakfast.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">免費提供的</div>
+        <div class="vcard-ex">"There are complimentary toiletries in the bathroom."</div>
+        <div class="vcard-ex">"Breakfast is complimentary for all guests."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. The hotel left _______ fruit and water in my room.</div>
+          <div class="vcard-practice-item">2. Is the airport shuttle _______ or do I pay extra?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="staff" data-en="amenities" data-zh="設施 / 便利設備">
+      <div class="vcard-accent" style="background:#5DCAA5"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="10" y="16" width="18" height="18" rx="3" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.2"/>
+          <rect x="32" y="16" width="18" height="18" rx="3" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1.2"/>
+          <rect x="54" y="16" width="18" height="18" rx="3" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.2"/>
+          <rect x="10" y="38" width="18" height="18" rx="3" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1.2"/>
+          <rect x="32" y="38" width="18" height="18" rx="3" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.2"/>
+          <rect x="54" y="38" width="18" height="18" rx="3" fill="#9FE1CB" stroke="#1D9E75" stroke-width="1.2"/>
+          <line x1="14" y1="22" x2="24" y2="22" stroke="#1D9E75" stroke-width="1" stroke-linecap="round"/>
+          <line x1="36" y1="22" x2="46" y2="22" stroke="#085041" stroke-width="1" stroke-linecap="round"/>
+          <line x1="58" y1="22" x2="68" y2="22" stroke="#1D9E75" stroke-width="1" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">amenities</div>
+        <div class="vcard-pron">/əˈmiːnɪtiz/</div>
+        <div class="vcard-meaning">Amenities are all the features and services a hotel provides to make your stay comfortable. Examples include Wi-Fi, gym, pool, and toiletries.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">設施 / 便利設備</div>
+        <div class="vcard-ex">"What amenities does this hotel offer?"</div>
+        <div class="vcard-ex">"The hotel has excellent amenities including a spa."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. I chose this hotel for its great _______ and location.</div>
+          <div class="vcard-practice-item">2. The _______ include free parking and a rooftop pool.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- CAT 5: KEY PHRASES (13) blue -->
+    <!-- ══════════════════════════════════════════ -->
+
+    <div class="vcard" data-group="phrases" data-en="I have a reservation" data-zh="我有預訂">
+      <div class="vcard-accent" style="background:#85B7EB"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <path d="M14 16 Q14 10 20 10 L56 10 Q62 10 62 16 L62 42 Q62 48 56 48 L44 48 L36 58 L36 48 L20 48 Q14 48 14 42 Z" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M26 28 L32 34 L46 20" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg></div>
+        <div class="vcard-en">I have a reservation.</div>
+        <div class="vcard-pron">/aɪ hæv ə ˌrɛzəˈveɪʃən/</div>
+        <div class="vcard-meaning">Use this phrase when you arrive at the hotel to tell staff you already booked a room. It is the first thing you say at check-in.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">我有預訂。</div>
+        <div class="vcard-ex">"Good afternoon — I have a reservation under Chen."</div>
+        <div class="vcard-ex">"I have a reservation for two nights, checking in today."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. _______ — my name is JP, checking in for tonight.</div>
+          <div class="vcard-practice-item">2. She walked to the desk and said: "_______."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="phrases" data-en="could I have…?" data-zh="我可以要…嗎？">
+      <div class="vcard-accent" style="background:#85B7EB"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <circle cx="40" cy="36" r="20" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5"/>
+          <path d="M34 30 Q34 22 40 22 Q46 22 46 28 Q46 34 40 36" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="40" cy="44" r="2.5" fill="#185FA5"/>
+        </svg></div>
+        <div class="vcard-en">Could I have…?</div>
+        <div class="vcard-pron">/kʊd aɪ hæv/</div>
+        <div class="vcard-meaning">Use "Could I have…?" to politely ask for something from hotel staff. It is more polite than saying "Give me" or "I want".</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">我可以要…嗎？</div>
+        <div class="vcard-ex">"Could I have an extra towel, please?"</div>
+        <div class="vcard-ex">"Could I have a wake-up call at 7am?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. _______ the Wi-Fi password, please?</div>
+          <div class="vcard-practice-item">2. _______ a room on a higher floor with a better view?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="phrases" data-en="there seems to be a problem" data-zh="好像有個問題">
+      <div class="vcard-accent" style="background:#85B7EB"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <path d="M40 12 L68 62 L12 62 Z" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5" stroke-linejoin="round"/>
+          <line x1="40" y1="30" x2="40" y2="48" stroke="#185FA5" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="40" cy="55" r="2.5" fill="#185FA5"/>
+        </svg></div>
+        <div class="vcard-en">There seems to be a problem.</div>
+        <div class="vcard-pron">/ðɛr siːmz tuː biː ə ˈprɒbləm/</div>
+        <div class="vcard-meaning">Use this phrase to politely report an issue to the hotel. It sounds less aggressive than saying "There is a problem" or "This is broken".</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">好像有個問題。</div>
+        <div class="vcard-ex">"There seems to be a problem with my room key."</div>
+        <div class="vcard-ex">"There seems to be a problem — my shower isn't working."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. _______ with the air conditioning in room 308.</div>
+          <div class="vcard-practice-item">2. She called reception and said: "_______."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="phrases" data-en="is breakfast included?" data-zh="有包含早餐嗎？">
+      <div class="vcard-accent" style="background:#85B7EB"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <ellipse cx="40" cy="50" rx="26" ry="8" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5"/>
+          <ellipse cx="40" cy="44" rx="26" ry="8" fill="#B5D4F4" stroke="#378ADD" stroke-width="1.2"/>
+          <path d="M22 44 Q40 28 58 44" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.2"/>
+          <line x1="40" y1="28" x2="40" y2="36" stroke="#378ADD" stroke-width="1.2" stroke-linecap="round"/>
+          <text font-size="12" font-family="sans-serif" fill="#185FA5" x="40" y="20" text-anchor="middle" dominant-baseline="central">?</text>
+        </svg></div>
+        <div class="vcard-en">Is breakfast included?</div>
+        <div class="vcard-pron">/ɪz ˈbrɛkfəst ɪnˈkluːdɪd/</div>
+        <div class="vcard-meaning">Ask this to find out if your morning meal is part of the room price. Some hotels charge extra for breakfast while others include it for free.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">有包含早餐嗎？</div>
+        <div class="vcard-ex">"Excuse me, is breakfast included in the room rate?"</div>
+        <div class="vcard-ex">"Is breakfast included or do I pay separately?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. _______ for my room type?</div>
+          <div class="vcard-practice-item">2. I asked at check-in: "_______?"</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="phrases" data-en="what time is…?" data-zh="…是幾點？">
+      <div class="vcard-accent" style="background:#85B7EB"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <circle cx="40" cy="40" r="26" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5"/>
+          <line x1="40" y1="40" x2="40" y2="22" stroke="#185FA5" stroke-width="2" stroke-linecap="round"/>
+          <line x1="40" y1="40" x2="54" y2="46" stroke="#378ADD" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="40" cy="40" r="2.5" fill="#185FA5"/>
+          <line x1="40" y1="14" x2="40" y2="18" stroke="#378ADD" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="64" y1="40" x2="60" y2="40" stroke="#378ADD" stroke-width="1.5" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">What time is…?</div>
+        <div class="vcard-pron">/wɒt taɪm ɪz/</div>
+        <div class="vcard-meaning">Use this phrase to ask about hotel schedules and timings. You can ask about check-in, check-out, breakfast, or pool hours.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">…是幾點？</div>
+        <div class="vcard-ex">"What time is check-out tomorrow?"</div>
+        <div class="vcard-ex">"What time is the breakfast buffet until?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. _______ the pool open until tonight?</div>
+          <div class="vcard-practice-item">2. _______ check-in? I arrived early at the hotel.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="phrases" data-en="can I leave my bags here?" data-zh="我可以把行李放這裡嗎？">
+      <div class="vcard-accent" style="background:#85B7EB"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="22" y="26" width="36" height="32" rx="4" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5"/>
+          <rect x="30" y="18" width="20" height="10" rx="3" fill="none" stroke="#378ADD" stroke-width="1.5"/>
+          <line x1="22" y1="38" x2="58" y2="38" stroke="#378ADD" stroke-width="1.2"/>
+          <line x1="22" y1="50" x2="58" y2="50" stroke="#85B7EB" stroke-width="1.2"/>
+          <circle cx="26" cy="60" r="3" fill="#B4B2A9"/>
+          <circle cx="54" cy="60" r="3" fill="#B4B2A9"/>
+          <path d="M12 70 L68 70" stroke="#378ADD" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M56 60 L62 52" stroke="#378ADD" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="3 2"/>
+          <text font-size="11" font-family="sans-serif" fill="#185FA5" x="66" y="50" text-anchor="middle" dominant-baseline="central">?</text>
+        </svg></div>
+        <div class="vcard-en">Can I leave my bags here?</div>
+        <div class="vcard-pron">/kæn aɪ liːv maɪ bæɡz hɪər/</div>
+        <div class="vcard-meaning">Use this phrase to ask the hotel to store your luggage temporarily. It is useful before check-in or after check-out.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">我可以把行李放這裡嗎？</div>
+        <div class="vcard-ex">"Can I leave my bags here while I go sightseeing?"</div>
+        <div class="vcard-ex">"Can I leave my bags here until my room is ready?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. _______ while I explore the city for a few hours?</div>
+          <div class="vcard-practice-item">2. My room isn't ready — _______ at the front desk?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="phrases" data-en="I'd like to make a request" data-zh="我想要提出一個要求">
+      <div class="vcard-accent" style="background:#85B7EB"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <circle cx="30" cy="28" r="10" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5"/>
+          <path d="M18 62 Q18 44 30 42 Q42 44 42 62" fill="#B5D4F4" stroke="#378ADD" stroke-width="1.5"/>
+          <path d="M44 46 Q52 38 62 44 L62 60 L44 60 Z" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.2"/>
+          <line x1="48" y1="50" x2="58" y2="50" stroke="#378ADD" stroke-width="1" stroke-linecap="round"/>
+          <line x1="48" y1="55" x2="56" y2="55" stroke="#85B7EB" stroke-width="1" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">I'd like to make a request.</div>
+        <div class="vcard-pron">/aɪd laɪk tuː meɪk ə rɪˈkwɛst/</div>
+        <div class="vcard-meaning">Use this polite phrase to ask for something special from the hotel. It is more formal and respectful than a direct demand.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">我想要提出一個要求。</div>
+        <div class="vcard-ex">"I'd like to make a request for a higher floor."</div>
+        <div class="vcard-ex">"I'd like to make a request for extra pillows."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. _______ — could I have a quiet room away from the lift?</div>
+          <div class="vcard-practice-item">2. She called reception and said: "_______."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="phrases" data-en="my room is not ready yet" data-zh="我的房間還沒準備好">
+      <div class="vcard-accent" style="background:#85B7EB"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="14" y="22" width="52" height="40" rx="5" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5"/>
+          <rect x="14" y="22" width="52" height="14" rx="5" fill="#B5D4F4" stroke="#378ADD" stroke-width="1.5"/>
+          <circle cx="58" cy="18" r="10" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+          <line x1="54" y1="14" x2="62" y2="22" stroke="#D85A30" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="62" y1="14" x2="54" y2="22" stroke="#D85A30" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="22" y1="46" x2="56" y2="46" stroke="#378ADD" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="22" y1="53" x2="48" y2="53" stroke="#85B7EB" stroke-width="1.2" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">My room is not ready yet.</div>
+        <div class="vcard-pron">/maɪ ruːm ɪz nɒt ˈrɛdi jɛt/</div>
+        <div class="vcard-meaning">You say this when you arrive early and the hotel hasn't finished cleaning your room. Ask if you can wait in the lobby or store your bags.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">我的房間還沒準備好。</div>
+        <div class="vcard-ex">"My room is not ready yet — can I wait in the lobby?"</div>
+        <div class="vcard-ex">"My room is not ready yet — where can I leave my bags?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. _______ — can you call me when it is?</div>
+          <div class="vcard-practice-item">2. The guest said: "_______ — I'll wait by the pool."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="phrases" data-en="could you recommend…?" data-zh="你能推薦…嗎？">
+      <div class="vcard-accent" style="background:#85B7EB"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <circle cx="36" cy="28" r="14" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5"/>
+          <path d="M30 28 Q30 20 36 20 Q42 20 42 26 Q42 32 36 34" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="36" cy="38" r="2" fill="#185FA5"/>
+          <path d="M50 44 L54 40 L58 44" fill="none" stroke="#378ADD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M54 40 L54 60 L68 60" fill="none" stroke="#378ADD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="68" cy="60" r="3" fill="#B5D4F4" stroke="#378ADD" stroke-width="1"/>
+        </svg></div>
+        <div class="vcard-en">Could you recommend…?</div>
+        <div class="vcard-pron">/kʊd juː ˌrɛkəˈmɛnd/</div>
+        <div class="vcard-meaning">Use this phrase to politely ask hotel staff for a suggestion about restaurants, activities, or attractions nearby. They are usually very helpful.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">你能推薦…嗎？</div>
+        <div class="vcard-ex">"Could you recommend a good restaurant nearby?"</div>
+        <div class="vcard-ex">"Could you recommend a tour to the night market?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. _______ a good café for breakfast near the hotel?</div>
+          <div class="vcard-practice-item">2. She asked the concierge: "_______ a day trip?"</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="phrases" data-en="is there a charge for…?" data-zh="…要收費嗎？">
+      <div class="vcard-accent" style="background:#85B7EB"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <rect x="14" y="26" width="52" height="34" rx="5" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5"/>
+          <rect x="14" y="26" width="52" height="12" rx="5" fill="#B5D4F4" stroke="#378ADD" stroke-width="1.5"/>
+          <line x1="22" y1="48" x2="38" y2="48" stroke="#378ADD" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="22" y1="54" x2="32" y2="54" stroke="#85B7EB" stroke-width="1.2" stroke-linecap="round"/>
+          <text font-size="16" font-family="sans-serif" fill="#185FA5" x="54" y="50" text-anchor="middle" dominant-baseline="central">?</text>
+        </svg></div>
+        <div class="vcard-en">Is there a charge for…?</div>
+        <div class="vcard-pron">/ɪz ðɛr ə tʃɑːrdʒ fɔːr/</div>
+        <div class="vcard-meaning">Ask this to find out if a hotel service costs extra money. Some services like parking, gym, and room service may have additional fees.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">…要收費嗎？</div>
+        <div class="vcard-ex">"Is there a charge for using the swimming pool?"</div>
+        <div class="vcard-ex">"Is there a charge for the airport shuttle service?"</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. _______ using the gym in this hotel?</div>
+          <div class="vcard-practice-item">2. _______ late check-out until 2pm?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vcard" data-group="phrases" data-en="please send someone to my room" data-zh="請派人來我的房間">
+      <div class="vcard-accent" style="background:#85B7EB"></div>
+      <div class="vcard-body">
+        <div class="vcard-pic"><svg viewBox="0 0 80 80" width="56" height="56">
+          <circle cx="28" cy="24" r="9" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5"/>
+          <path d="M16 56 Q16 40 28 38 Q40 40 40 56" fill="#B5D4F4" stroke="#378ADD" stroke-width="1.5"/>
+          <path d="M48 40 L64 40 M56 34 L64 40 L56 46" fill="none" stroke="#378ADD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="56" y="20" width="16" height="16" rx="3" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.2"/>
+          <line x1="59" y1="26" x2="69" y2="26" stroke="#378ADD" stroke-width="1" stroke-linecap="round"/>
+          <line x1="59" y1="31" x2="67" y2="31" stroke="#85B7EB" stroke-width="1" stroke-linecap="round"/>
+        </svg></div>
+        <div class="vcard-en">Please send someone to my room.</div>
+        <div class="vcard-pron">/pliːz sɛnd ˈsʌmwʌn tuː maɪ ruːm/</div>
+        <div class="vcard-meaning">Use this phrase to request hotel staff visit your room for maintenance, cleaning, or delivery. Always state your room number when calling.</div>
+        <div class="vcard-divider"></div>
+        <div class="vcard-zh">請派人來我的房間。</div>
+        <div class="vcard-ex">"Please send someone to my room — the toilet is blocked."</div>
+        <div class="vcard-ex">"Please send someone to room 412 to fix the TV."</div>
+        <div class="vcard-practice">
+          <div class="vcard-practice-label">✏ Try using this word:</div>
+          <div class="vcard-practice-item">1. _______ — I have no hot water in my shower.</div>
+          <div class="vcard-practice-item">2. I called reception: "_______ to bring extra towels."</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="vc-footer" id="count">Showing 65 words · Lesson 6: Hotel Check-In &amp; Requests</div>
 </div>
-<div class="controls">
-<div class="filters">
-<button class="fb active" data-cat="all">All</button>
-<button class="fb" data-cat="Greetings">Greetings</button>
-<button class="fb" data-cat="Introductions">Introductions</button>
-<button class="fb" data-cat="Check-In">Check-In</button>
-<button class="fb" data-cat="Documents">Documents</button>
-<button class="fb" data-cat="Key Phrases">Key Phrases</button>
-</div>
-<input class="search-box" type="search" placeholder="Search English or 中文…" id="srch" aria-label="Search vocabulary cards">
-</div>
-<div class="grid" id="grid"></div>
-<div class="footer" id="ft"></div>
 <script>
-const ACCENT={Greetings:"#F0997B",Introductions:"#EF9F27","Check-In":"#AFA9EC",Documents:"#5DCAA5","Key Phrases":"#85B7EB"};
-const words=[
-{cat:"Greetings",en:"hello",pron:"/həˈloʊ/",zh:"你好",meaning:"Hello is a friendly word used to greet someone. You say it when you first meet or see a person.",ex1:'"Hello! Nice to meet you."',ex2:'"Hello, my name is Sarah."',p1:"Say _______ when you enter a shop.",p2:"The flight attendant smiled and said _______."},
-{cat:"Greetings",en:"hi",pron:"/haɪ/",zh:"嗨",meaning:"Hi is a short, informal way to greet someone. You use it with friends or in casual situations.",ex1:'"Hi! How are you?"',ex2:'"Hi, I have a reservation."',p1:"She waved and said _______.",p2:"_______, is this seat taken?"},
-{cat:"Greetings",en:"good morning",pron:"/ɡʊd ˈmɔːrnɪŋ/",zh:"早安",meaning:"Good morning is a greeting used in the morning. You say it before noon to be polite.",ex1:'"Good morning! Welcome to the hotel."',ex2:'"Good morning, I need to check in."',p1:"Say _______ _______ to your teacher.",p2:"_______ _______, may I see your ticket?"},
-{cat:"Greetings",en:"good afternoon",pron:"/ɡʊd ˌæftərˈnuːn/",zh:"午安",meaning:"Good afternoon is a greeting used between noon and evening. It is polite and professional.",ex1:'"Good afternoon, how can I help you?"',ex2:'"Good afternoon, I would like a window seat."',p1:"Say _______ _______ after lunch.",p2:"_______ _______, my flight is delayed."},
-{cat:"Greetings",en:"good evening",pron:"/ɡʊd ˈiːvnɪŋ/",zh:"晚安（問候）",meaning:"Good evening is a greeting used after the sun sets. You use it when you arrive somewhere at night.",ex1:'"Good evening, do you have a room available?"',ex2:'"Good evening, we have a late check-in."',p1:"Say _______ _______ at night.",p2:"_______ _______, I have a 9 PM flight."},
-{cat:"Greetings",en:"goodbye",pron:"/ˌɡʊdˈbaɪ/",zh:"再見",meaning:"Goodbye is a farewell word used when you leave. You say it at the end of a conversation.",ex1:'"Goodbye! Have a safe flight."',ex2:'"Goodbye and thank you for your help."',p1:"Say _______ before you leave.",p2:"The agent said _______ and waved."},
-{cat:"Greetings",en:"bye",pron:"/baɪ/",zh:"拜拜",meaning:"Bye is a short, informal way to say goodbye. You use it with people you know.",ex1:'"Bye! See you at the gate."',ex2:'"Bye, thanks for everything."',p1:"She waved and said _______.",p2:"_______, I need to board now."},
-{cat:"Greetings",en:"nice to meet you",pron:"/naɪs tə miːt juː/",zh:"很高興認識你",meaning:"Nice to meet you is a polite phrase for a first meeting. You say it right after learning someone's name.",ex1:'"Nice to meet you! I am visiting from Taiwan."',ex2:'"Nice to meet you, I am your seat neighbour."',p1:"After shaking hands, say: _______ _______ _______ _______.",p2:"The airline staff said _______ _______ _______ _______ and smiled."},
-{cat:"Greetings",en:"how are you",pron:"/haʊ ɑːr juː/",zh:"你好嗎",meaning:"How are you is a common greeting question. You ask it to show you care about someone.",ex1:'"How are you today?" "I am fine, thank you."',ex2:'"How are you? Is this your first trip abroad?"',p1:"Ask your partner: _______ _______ _______?",p2:"The check-in agent asked _______ _______ _______."},
-{cat:"Greetings",en:"I am fine",pron:"/aɪ æm faɪn/",zh:"我很好",meaning:"I am fine is a polite answer to How are you. It means you are well and comfortable.",ex1:'"I am fine, thank you! And you?"',ex2:'"I am fine — just a little tired from the journey."',p1:"Answer: _______ _______ _______, thank you.",p2:"She smiled and said: _______ _______ _______."},
-{cat:"Greetings",en:"please",pron:"/pliːz/",zh:"請",meaning:"Please is a polite word added to requests. You use it to be respectful when asking for something.",ex1:'"Can I have a window seat, please?"',ex2:'"Please show me your boarding pass."',p1:"Add _______ to make a request polite.",p2:"_______, where is gate 12?"},
-{cat:"Greetings",en:"thank you",pron:"/ˈθæŋk juː/",zh:"謝謝",meaning:"Thank you is a phrase to show gratitude. You say it when someone helps or gives you something.",ex1:'"Thank you for your help at the airport."',ex2:'"Thank you! Here is my passport."',p1:"Say _______ _______ after someone helps you.",p2:"_______ _______ for checking me in so quickly."},
-{cat:"Greetings",en:"you are welcome",pron:"/juː ɑːr ˈwɛlkəm/",zh:"不客氣",meaning:"You are welcome is the polite reply to Thank you. You say it to show it was no trouble.",ex1:'"You are welcome! Enjoy your flight."',ex2:'"You are welcome, have a wonderful trip."',p1:"Reply to thank you: _______ _______ _______.",p2:"The staff said _______ _______ _______ with a smile."},
-{cat:"Introductions",en:"my name is",pron:"/maɪ neɪm ɪz/",zh:"我的名字是",meaning:"My name is introduces who you are. You say it when meeting someone for the first time.",ex1:'"My name is Chen Wei. Nice to meet you."',ex2:'"My name is Emma and I am on flight BR123."',p1:"Say: _______ _______ _______ [your name].",p2:"At check-in: _______ _______ _______ Lee."},
-{cat:"Introductions",en:"I am from",pron:"/aɪ æm frɒm/",zh:"我來自",meaning:"I am from tells people your country or city of origin. You use it to introduce your background.",ex1:'"I am from Taiwan." "Oh really? How lovely!"',ex2:'"I am from Taipei, and this is my first trip to Japan."',p1:"Say: _______ _______ _______ Taiwan.",p2:"_______ _______ _______ a small town near Taichung."},
-{cat:"Introductions",en:"I live in",pron:"/aɪ lɪv ɪn/",zh:"我住在",meaning:"I live in says where your home is now. You use it when someone asks about your current address.",ex1:'"I live in Taipei, but I travel a lot."',ex2:'"I live in Vancouver now, but I grew up in Taiwan."',p1:"Say: _______ _______ _______ Taipei.",p2:"She said: _______ _______ _______ Hong Kong."},
-{cat:"Introductions",en:"I am a tourist",pron:"/aɪ æm ə ˈtʊərɪst/",zh:"我是觀光客",meaning:"I am a tourist means you are visiting for leisure. You say it when you enter a country or fill in forms.",ex1:'"I am a tourist visiting for two weeks."',ex2:'"I am a tourist — can you recommend a good hotel?"',p1:"At immigration: _______ _______ _______ _______ _______ here for vacation.",p2:"_______ _______ _______ _______ and I am staying for five days."},
-{cat:"Introductions",en:"I am travelling alone",pron:"/aɪ æm ˈtrævəlɪŋ əˈloʊn/",zh:"我一個人旅行",meaning:"I am travelling alone means no one is with you on this trip. You might say this at customs.",ex1:'"I am travelling alone for the first time."',ex2:'"Yes, I am travelling alone. My hotel is downtown."',p1:"Say: _______ _______ _______ _______ on this trip.",p2:"The customs officer asked if _______ _______ _______ _______."},
-{cat:"Introductions",en:"I am travelling with family",pron:"/aɪ æm ˈtrævəlɪŋ wɪð ˈfæməli/",zh:"我和家人一起旅行",meaning:"I am travelling with family means your relatives are with you. You say this when checking in.",ex1:'"I am travelling with family — can we have seats together?"',ex2:'"I am travelling with family of four."',p1:"Tell the agent: _______ _______ _______ _______ _______ of three.",p2:"_______ _______ _______ _______ _______ and we need two rooms."},
-{cat:"Introductions",en:"age",pron:"/eɪdʒ/",zh:"年齡",meaning:"Age is how many years old someone is. You write your age on travel forms.",ex1:'"Please write your age on the arrival card."',ex2:'"My age is 32. I was born in 1993."',p1:"Fill in your _______ on the form.",p2:"The form asks for your name, passport number, and _______."},
-{cat:"Introductions",en:"nationality",pron:"/ˌnæʃəˈnæləti/",zh:"國籍",meaning:"Nationality is the country where you are a citizen. You write it on passport and customs forms.",ex1:'"My nationality is Taiwanese."',ex2:'"Please state your nationality at the immigration counter."',p1:"My _______ is Taiwanese.",p2:"The officer checked my _______ in the system."},
-{cat:"Introductions",en:"occupation",pron:"/ˌɒkjʊˈpeɪʃən/",zh:"職業",meaning:"Occupation means your job or what you do for work. Customs forms often ask for your occupation.",ex1:'"My occupation is teacher."',ex2:'"Please state your occupation on the immigration form."',p1:"My _______ is engineer.",p2:"The arrival card asks for your name and _______."},
-{cat:"Introductions",en:"purpose of visit",pron:"/ˈpɜːrpəs əv ˈvɪzɪt/",zh:"來訪目的",meaning:"Purpose of visit means why you are coming to a country. You answer this at immigration.",ex1:'"The purpose of visit is tourism."',ex2:'"My purpose of visit is to attend a business conference."',p1:"The officer asked: What is your _______ _______ _______?",p2:"Write your _______ _______ _______ on the customs form."},
-{cat:"Introductions",en:"length of stay",pron:"/lɛŋkθ əv steɪ/",zh:"停留時間",meaning:"Length of stay means how many days or weeks you will be in the country. Officials ask this at the border.",ex1:'"My length of stay is seven days."',ex2:'"Please state the length of stay on the form."',p1:"The immigration card asks for your _______ _______ _______ _______.",p2:"My _______ _______ _______ _______ is fourteen days."},
-{cat:"Introductions",en:"address in [country]",pron:"/ˈædrɛs ɪn/",zh:"在[國家]的地址",meaning:"Address in [country] means where you will stay during your visit. You write the hotel name and address.",ex1:'"My address in Japan is the Grand Hyatt, Tokyo."',ex2:'"Please write your address in the country on the arrival form."',p1:"Write your _______ _______ Japan on the form.",p2:"My _______ _______ Thailand is the Hilton Bangkok."},
-{cat:"Introductions",en:"date of birth",pron:"/deɪt əv bɜːrθ/",zh:"出生日期",meaning:"Date of birth is the day you were born, shown as day, month, year. It appears on passports and forms.",ex1:'"My date of birth is 15 March 1990."',ex2:'"Please enter your date of birth in DD/MM/YYYY format."',p1:"Fill in your _______ _______ _______ on the form.",p2:"The officer checked my _______ _______ _______ on my passport."},
-{cat:"Check-In",en:"check in",pron:"/tʃɛk ɪn/",zh:"辦理登機手續",meaning:"Check in means to register at the airport before your flight. You do it at the check-in desk or a kiosk.",ex1:'"I need to check in for my flight to Tokyo."',ex2:'"Please check in at least two hours before departure."',p1:"Go to the desk and _______ _______ for your flight.",p2:"I need to _______ _______ — my flight leaves in three hours."},
-{cat:"Check-In",en:"check-in desk",pron:"/tʃɛk-ɪn dɛsk/",zh:"報到櫃檯",meaning:"The check-in desk is the counter where airline staff help you. You go there to get your boarding pass.",ex1:'"Please go to check-in desk number 14."',ex2:'"The check-in desk for Air Asia is in Terminal 1."',p1:"Where is the _______ _______ for my flight?",p2:"I waited in line at the _______ _______ for 20 minutes."},
-{cat:"Check-In",en:"airline",pron:"/ˈɛːlaɪn/",zh:"航空公司",meaning:"An airline is a company that operates passenger flights. Airlines have their own check-in desks.",ex1:'"Which airline are you flying with today?"',ex2:'"The airline will text you if your flight is delayed."',p1:"Which _______ are you flying with?",p2:"The _______ agent checked my luggage tags."},
-{cat:"Check-In",en:"flight number",pron:"/flaɪt ˈnʌmbər/",zh:"班機號碼",meaning:"A flight number is a code that identifies your specific flight. It is on your ticket and boarding pass.",ex1:'"My flight number is BR 123."',ex2:'"Please check the board for your flight number."',p1:"What is your _______ _______?",p2:"Enter your _______ _______ to see the departure gate."},
-{cat:"Check-In",en:"window seat",pron:"/ˈwɪndoʊ siːt/",zh:"靠窗座位",meaning:"A window seat is a seat next to the airplane window. You can see outside and lean against the wall.",ex1:'"I would like a window seat, please."',ex2:'"She always books a window seat to watch the sunset."',p1:"Can I have a _______ _______, please?",p2:"I prefer a _______ _______ so I can see the clouds."},
-{cat:"Check-In",en:"aisle seat",pron:"/aɪl siːt/",zh:"靠走道座位",meaning:"An aisle seat is next to the aisle in the middle of the plane. It is easy to get up and walk around.",ex1:'"I prefer an aisle seat — I like to walk around."',ex2:'"Can I have an aisle seat? I need to stretch my legs."',p1:"Can I have an _______ _______, please?",p2:"He chose an _______ _______ because he is very tall."},
-{cat:"Check-In",en:"luggage",pron:"/ˈlʌɡɪdʒ/",zh:"行李",meaning:"Luggage means your bags and suitcases when you travel. You check in heavy luggage at the desk.",ex1:'"How many pieces of luggage do you have?"',ex2:'"My luggage is too heavy — I need to remove some items."',p1:"I have two pieces of _______.",p2:"Put your name tag on your _______."},
-{cat:"Check-In",en:"baggage allowance",pron:"/ˈbæɡɪdʒ əˈlaʊəns/",zh:"行李限額",meaning:"Baggage allowance is the maximum weight of luggage you can bring for free. Extra weight costs money.",ex1:'"The baggage allowance for this flight is 23 kg."',ex2:'"Check your baggage allowance before packing your suitcase."',p1:"My _______ _______ is 20 kg.",p2:"I had to pay extra because I went over the _______ _______."},
-{cat:"Check-In",en:"overweight",pron:"/ˌoʊvərˈweɪt/",zh:"超重",meaning:"Overweight means your luggage is heavier than the limit. You must pay a fee at the check-in desk.",ex1:'"Your bag is overweight — there is a fee of $50."',ex2:'"Remove some items if your bag is overweight."',p1:"My suitcase is _______ by 3 kg.",p2:"I had to pay because my bag was _______."},
-{cat:"Check-In",en:"carry-on bag",pron:"/ˈkæri ɒn bæɡ/",zh:"手提行李",meaning:"A carry-on bag is small luggage you take inside the plane. It fits in the overhead bin above your seat.",ex1:'"My carry-on bag has my laptop and charger."',ex2:'"The carry-on bag must be under 7 kg."',p1:"I only have a _______ _______ _______.",p2:"Put your _______ _______ _______ in the bin above your seat."},
-{cat:"Check-In",en:"overhead bin",pron:"/ˈoʊvərhɛd bɪn/",zh:"頭頂置物箱",meaning:"The overhead bin is a storage space above the airplane seats. You put your carry-on bag there during the flight.",ex1:'"Please put your bag in the overhead bin."',ex2:'"The overhead bin above my seat is already full."',p1:"Put your bag in the _______ _______ above your seat.",p2:"The _______ _______ was full, so I put my bag under the seat."},
-{cat:"Check-In",en:"departure time",pron:"/dɪˈpɑːrtʃər taɪm/",zh:"出發時間",meaning:"Departure time is when your flight takes off. You must be at the gate before departure time.",ex1:'"My departure time is 14:30. I need to hurry!"',ex2:'"Check your boarding pass for the departure time."',p1:"My _______ _______ is 7:00 AM.",p2:"Do not miss your _______ _______ — get to the gate early."},
-{cat:"Check-In",en:"gate",pron:"/ɡeɪt/",zh:"登機門",meaning:"A gate is the door at the airport where you board your flight. Gate numbers are shown on your boarding pass.",ex1:'"Your flight departs from gate B12."',ex2:'"Please go to gate 23 — boarding starts in 20 minutes."',p1:"Which _______ is my flight at?",p2:"The screen showed _______ 5A for the Tokyo flight."},
-{cat:"Check-In",en:"terminal",pron:"/ˈtɜːrmɪnəl/",zh:"航廈",meaning:"A terminal is a large building at the airport where passengers check in and board. Airports often have multiple terminals.",ex1:'"Your flight leaves from Terminal 2."',ex2:'"Take the shuttle bus to Terminal 3 for international flights."',p1:"Which _______ is my airline in?",p2:"The check-in desk is in _______ B."},
-{cat:"Documents",en:"passport",pron:"/ˈpæspɔːrt/",zh:"護照",meaning:"A passport is an official document with your photo and personal details. You use it to enter other countries.",ex1:'"Please show your passport at the check-in desk."',ex2:'"My passport expires next year — I need to renew it."',p1:"Show your _______ at the immigration counter.",p2:"I forgot my _______ — now I cannot board!"},
-{cat:"Documents",en:"boarding pass",pron:"/ˈbɔːrdɪŋ pæs/",zh:"登機證",meaning:"A boarding pass is a document or mobile screen that lets you get on your plane. It shows your seat and gate.",ex1:'"Here is your boarding pass — seat 14A, gate C7."',ex2:'"Show your boarding pass when you go through security."',p1:"Show your _______ _______ at the gate.",p2:"I have my _______ _______ on my phone."},
-{cat:"Documents",en:"visa",pron:"/ˈviːzə/",zh:"簽證",meaning:"A visa is a stamp or sticker in your passport that lets you enter a country. Some countries require a visa.",ex1:'"Do I need a visa to visit Japan?"',ex2:'"My visa allows me to stay for 30 days."',p1:"I need a _______ to enter this country.",p2:"Check if you need a _______ before booking your flight."},
-{cat:"Documents",en:"arrival card",pron:"/əˈraɪvəl kɑːrd/",zh:"入境表",meaning:"An arrival card is a form you fill in on the plane or at immigration. You write your name, passport number, and hotel.",ex1:'"Please fill in the arrival card before landing."',ex2:'"The arrival card asks for your address in the country."',p1:"Fill in the _______ _______ on the plane.",p2:"Do not lose your _______ _______ — you need it at immigration."},
-{cat:"Documents",en:"customs form",pron:"/ˈkʌstəmz fɔːrm/",zh:"海關申報表",meaning:"A customs form is a document that lists items you are bringing into a country. You must declare certain goods.",ex1:'"Write all gifts and food items on the customs form."',ex2:'"The customs form asks how much cash you are carrying."',p1:"Fill in the _______ _______ before you land.",p2:"I need to declare my gifts on the _______ _______."},
-{cat:"Documents",en:"ticket",pron:"/ˈtɪkɪt/",zh:"機票",meaning:"A ticket is your booking confirmation for a flight. It shows your name, flight, seat, and travel dates.",ex1:'"Show your ticket when you check in."',ex2:'"My ticket is booked for the 9 AM flight to Seoul."',p1:"Show your _______ at the check-in counter.",p2:"I printed my _______ at home."},
-{cat:"Documents",en:"itinerary",pron:"/aɪˈtɪnəreri/",zh:"行程表",meaning:"An itinerary is a plan of your trip showing dates, flights, and hotels. You may need to show it at customs.",ex1:'"My itinerary shows I have a hotel booked in Osaka."',ex2:'"The immigration officer asked to see my itinerary."',p1:"I showed the officer my _______ at customs.",p2:"Print your _______ in case there is no Wi-Fi."},
-{cat:"Documents",en:"travel insurance",pron:"/ˈtrævəl ɪnˈʃʊərəns/",zh:"旅遊保險",meaning:"Travel insurance protects you if something goes wrong on your trip. It covers medical costs and lost luggage.",ex1:'"Always buy travel insurance before going abroad."',ex2:'"My travel insurance covered the cost of my lost bag."',p1:"Buy _______ _______ before your trip.",p2:"My _______ _______ paid for my hospital visit overseas."},
-{cat:"Documents",en:"booking confirmation",pron:"/ˈbʊkɪŋ ˌkɒnfərˈmeɪʃən/",zh:"預訂確認書",meaning:"A booking confirmation is an email or document that proves you have a reservation. Show it at the hotel or airline desk.",ex1:'"I have my booking confirmation on my phone."',ex2:'"Please show your booking confirmation at check-in."',p1:"Show your _______ _______ to the hotel staff.",p2:"I forgot to print my _______ _______ but I have it by email."},
-{cat:"Documents",en:"credit card",pron:"/ˈkrɛdɪt kɑːrd/",zh:"信用卡",meaning:"A credit card is a payment card you use to buy things now and pay later. You need one to book hotels and flights.",ex1:'"Can I pay by credit card?"',ex2:'"The airline website requires a credit card to buy tickets."',p1:"Can I use my _______ _______ here?",p2:"I paid for my ticket with a _______ _______."},
-{cat:"Documents",en:"ID",pron:"/ˌaɪ ˈdiː/",zh:"身分證",meaning:"ID is a document that proves who you are. You may show your ID card or passport as identification.",ex1:'"Do you have any ID? A passport or ID card is fine."',ex2:'"I showed my ID at the airport entrance."',p1:"Can I use my _______ instead of my passport?",p2:"Please show some _______ to collect your ticket."},
-{cat:"Documents",en:"departure card",pron:"/dɪˈpɑːrtʃər kɑːrd/",zh:"出境卡",meaning:"A departure card is a form you fill in when leaving some countries. It records where you are going.",ex1:'"Fill in the departure card before leaving the country."',ex2:'"The departure card asks for your destination and flight number."',p1:"Fill in the _______ _______ at the exit counter.",p2:"I lost my _______ _______ — I need a new one."},
-{cat:"Documents",en:"e-ticket",pron:"/ˈiː ˌtɪkɪt/",zh:"電子機票",meaning:"An e-ticket is a digital airline ticket stored on your phone or email. You show it at check-in without printing.",ex1:'"Show your e-ticket on your phone to check in."',ex2:'"My e-ticket was sent to my email right after booking."',p1:"I have an _______ on my phone.",p2:"Scan your _______ at the self-check-in kiosk."},
-{cat:"Key Phrases",en:"Where is the check-in desk?",pron:"/wɛr ɪz ðə tʃɛk-ɪn dɛsk/",zh:"報到櫃台在哪裡？",meaning:"This phrase asks for the location of the check-in area. You use it when you arrive at the airport.",ex1:'"Excuse me, where is the check-in desk for Eva Air?"',ex2:'"Where is the check-in desk? I cannot find terminal B."',p1:"Ask the information staff: _______ _______ _______ _______ _______ _______?",p2:"_______ _______ _______ _______ _______ _______ for China Airlines?"},
-{cat:"Key Phrases",en:"I have a reservation",pron:"/aɪ hæv ə ˌrɛzərˈveɪʃən/",zh:"我有預訂",meaning:"I have a reservation means you have already booked your flight or room. You say this at check-in.",ex1:'"I have a reservation under the name Chen."',ex2:'"I have a reservation on flight BR456 to Bangkok."',p1:"Say: _______ _______ _______ _______ under my name.",p2:"_______ _______ _______ _______ — can you check me in?"},
-{cat:"Key Phrases",en:"Can I have a window seat?",pron:"/kæn aɪ hæv ə ˈwɪndoʊ siːt/",zh:"我可以要靠窗座位嗎？",meaning:"This phrase is a polite request for a seat by the window. You ask it at the check-in desk.",ex1:'"Can I have a window seat? I love looking at the clouds."',ex2:'"Can I have a window seat on the left side of the plane?"',p1:"Ask politely: _______ _______ _______ _______ _______ _______ _______?",p2:"_______ _______ _______ _______ _______ _______ _______ for this flight?"},
-{cat:"Key Phrases",en:"How much is the extra fee?",pron:"/haʊ mʌtʃ ɪz ðə ˈɛkstrə fiː/",zh:"額外費用是多少？",meaning:"This phrase asks about the cost of an additional charge. You use it for overweight luggage or seat upgrades.",ex1:'"How much is the extra fee for a second bag?"',ex2:'"How much is the extra fee for an exit row seat?"',p1:"Ask: _______ _______ _______ _______ _______ _______ for overweight luggage?",p2:"_______ _______ _______ _______ _______ _______ for choosing my seat?"},
-{cat:"Key Phrases",en:"My bag is too heavy",pron:"/maɪ bæɡ ɪz tuː ˈhɛvi/",zh:"我的包包太重了",meaning:"My bag is too heavy tells the agent your luggage exceeds the weight limit. You say it at the check-in desk.",ex1:'"My bag is too heavy — what should I do?"',ex2:'"My bag is too heavy by 2 kg. Can I move some things to my carry-on?"',p1:"Tell the agent: _______ _______ _______ _______ _______.",p2:"_______ _______ _______ _______ _______ — how much is the fee?"},
-{cat:"Key Phrases",en:"What time does the flight depart?",pron:"/wɒt taɪm dʌz ðə flaɪt dɪˈpɑːrt/",zh:"班機幾點出發？",meaning:"This question asks the scheduled take-off time. You use it if you are unsure or your ticket is unclear.",ex1:'"What time does the flight depart? The board shows two times."',ex2:'"What time does the flight depart from this gate?"',p1:"Ask: _______ _______ _______ _______ _______ _______?",p2:"_______ _______ _______ _______ _______ _______ from gate B3?"},
-{cat:"Key Phrases",en:"Which gate is it?",pron:"/wɪtʃ ɡeɪt ɪz ɪt/",zh:"是哪個登機門？",meaning:"Which gate is it asks where you should go to board the plane. You ask airport staff if you cannot find the gate.",ex1:'"Excuse me, which gate is it for flight KE721?"',ex2:'"Which gate is it? The board says it has changed."',p1:"Ask: _______ _______ _______ _______ for my flight?",p2:"_______ _______ _______ _______ — I see two gates on the board."},
-{cat:"Key Phrases",en:"Is the flight on time?",pron:"/ɪz ðə flaɪt ɒn taɪm/",zh:"班機準時嗎？",meaning:"Is the flight on time asks if the plane will depart or arrive as scheduled. You ask if you are worried about a delay.",ex1:'"Excuse me, is the flight on time?"',ex2:'"Is the flight on time? There is bad weather outside."',p1:"Ask at the gate: _______ _______ _______ _______ _______?",p2:"_______ _______ _______ _______ _______ or is there a delay?"},
-{cat:"Key Phrases",en:"My flight is delayed",pron:"/maɪ flaɪt ɪz dɪˈleɪd/",zh:"我的班機誤點了",meaning:"My flight is delayed means your plane will take off later than planned. You say it to inform people or ask for help.",ex1:'"My flight is delayed by two hours. Can I change my connection?"',ex2:'"My flight is delayed — is there a lounge I can use?"',p1:"Tell someone: _______ _______ _______ _______ by one hour.",p2:"_______ _______ _______ _______ — when will it depart?"},
-{cat:"Key Phrases",en:"Where is the toilet?",pron:"/wɛr ɪz ðə ˈtɔɪlɪt/",zh:"廁所在哪裡？",meaning:"Where is the toilet asks for the bathroom location. You use it when you need the restroom at the airport.",ex1:'"Excuse me, where is the toilet?"',ex2:'"Where is the toilet? I have been walking for ten minutes!"',p1:"Ask a staff member: _______ _______ _______ _______?",p2:"_______ _______ _______ _______ near the departure gate?"},
-{cat:"Key Phrases",en:"I do not understand",pron:"/aɪ duː nɒt ˌʌndəˈstænd/",zh:"我不明白",meaning:"I do not understand means the other person's words are not clear to you. You say it so they can explain again.",ex1:'"Sorry, I do not understand. Can you repeat that?"',ex2:'"I do not understand the announcement — what did they say?"',p1:"Say: _______ _______ _______ _______ — please speak slowly.",p2:"_______ _______ _______ _______ — can you write it down?"},
-{cat:"Key Phrases",en:"Can you repeat that?",pron:"/kæn juː rɪˈpiːt ðæt/",zh:"你可以再說一遍嗎？",meaning:"Can you repeat that asks someone to say the same thing again. You use it if you missed something.",ex1:'"Sorry, can you repeat that? It is very noisy here."',ex2:'"Can you repeat that? I want to make sure I heard the gate number."',p1:"Ask: _______ _______ _______ _______?",p2:"_______ _______ _______ _______, please — I missed the time."},
-{cat:"Key Phrases",en:"Can you speak slowly?",pron:"/kæn juː spiːk ˈsloʊli/",zh:"你可以說慢一點嗎？",meaning:"Can you speak slowly asks someone to slow down when talking. You use it when English is spoken too fast.",ex1:'"Can you speak slowly? My English is not so good."',ex2:'"Excuse me, can you speak slowly? I am still learning."',p1:"Ask: _______ _______ _______ _______?",p2:"_______ _______ _______ _______, please — I am a beginner."},
-{cat:"Key Phrases",en:"I need help",pron:"/aɪ niːd hɛlp/",zh:"我需要幫助",meaning:"I need help means you want someone to assist you. You say it when something is wrong or confusing.",ex1:'"Excuse me, I need help finding my gate."',ex2:'"I need help — my bag is lost."',p1:"Say: _______ _______ _______ — my passport is missing.",p2:"_______ _______ _______ — can you check me in again?"},
-];
-
-function makeSVG(en,cat){
-const s={Greetings:"#F0997B",Introductions:"#EF9F27","Check-In":"#AFA9EC",Documents:"#5DCAA5","Key Phrases":"#85B7EB"};
-const c=s[cat]||"#B4B2A9";
-const e=en.toLowerCase();
-if(e.includes("hello")||e.includes("hi")){return`<svg viewBox="0 0 80 80" width="70" height="50"><circle cx="40" cy="28" r="16" fill="${c}" opacity=".25"/><ellipse cx="40" cy="60" rx="22" ry="12" fill="${c}" opacity=".18"/><circle cx="40" cy="28" r="10" fill="${c}"/><line x1="24" y1="22" x2="18" y2="16" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><line x1="56" y1="22" x2="62" y2="16" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/></svg>`;}
-if(e.includes("passport")||e.includes("visa")||e.includes("ticket")||e.includes("boarding")||e.includes("e-ticket")){return`<svg viewBox="0 0 80 80" width="70" height="50"><rect x="14" y="20" width="52" height="38" rx="4" fill="${c}" opacity=".2" stroke="${c}" stroke-width="1.5"/><rect x="20" y="26" width="16" height="20" rx="2" fill="${c}"/><line x1="42" y1="30" x2="60" y2="30" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/><line x1="42" y1="37" x2="60" y2="37" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/><line x1="42" y1="44" x2="55" y2="44" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/></svg>`;}
-if(e.includes("luggage")||e.includes("bag")||e.includes("carry")||e.includes("suitcase")||e.includes("baggage")||e.includes("overweight")){return`<svg viewBox="0 0 80 80" width="70" height="50"><rect x="16" y="26" width="48" height="36" rx="5" fill="${c}" opacity=".2" stroke="${c}" stroke-width="1.5"/><rect x="28" y="18" width="24" height="10" rx="3" fill="none" stroke="${c}" stroke-width="1.5"/><line x1="40" y1="26" x2="40" y2="62" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/><circle cx="22" cy="63" r="4" fill="${c}"/><circle cx="58" cy="63" r="4" fill="${c}"/></svg>`;}
-if(e.includes("gate")||e.includes("terminal")||e.includes("airport")){return`<svg viewBox="0 0 80 80" width="70" height="50"><rect x="10" y="45" width="60" height="18" rx="3" fill="${c}" opacity=".2"/><path d="M10 45 Q40 15 70 45" fill="${c}" opacity=".15" stroke="${c}" stroke-width="1.5"/><rect x="32" y="38" width="16" height="25" rx="2" fill="${c}" opacity=".3"/><line x1="10" y1="63" x2="70" y2="63" stroke="${c}" stroke-width="1.5"/></svg>`;}
-if(e.includes("seat")){return`<svg viewBox="0 0 80 80" width="70" height="50"><rect x="20" y="20" width="40" height="28" rx="4" fill="${c}" opacity=".2" stroke="${c}" stroke-width="1.5"/><rect x="16" y="45" width="48" height="12" rx="3" fill="${c}" opacity=".3" stroke="${c}" stroke-width="1.5"/><rect x="12" y="30" width="8" height="22" rx="3" fill="${c}" opacity=".4"/><rect x="60" y="30" width="8" height="22" rx="3" fill="${c}" opacity=".4"/></svg>`;}
-if(e.includes("check in")||e.includes("check-in")){return`<svg viewBox="0 0 80 80" width="70" height="50"><rect x="14" y="22" width="52" height="36" rx="4" fill="${c}" opacity=".15" stroke="${c}" stroke-width="1.5"/><line x1="14" y1="34" x2="66" y2="34" stroke="${c}" stroke-width="1.5"/><polyline points="28,46 36,54 54,38" fill="none" stroke="${c}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;}
-if(e.includes("flight")||e.includes("depart")||e.includes("plane")){return`<svg viewBox="0 0 80 80" width="70" height="50"><path d="M12 50 L40 20 L68 50" fill="${c}" opacity=".15" stroke="${c}" stroke-width="1.5" stroke-linejoin="round"/><path d="M28 40 L40 20 L52 40" fill="${c}" opacity=".3"/><line x1="20" y1="55" x2="60" y2="55" stroke="${c}" stroke-width="2" stroke-linecap="round"/><line x1="15" y1="62" x2="65" y2="62" stroke="${c}" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4,3"/></svg>`;}
-if(e.includes("form")||e.includes("card")||e.includes("arrival")||e.includes("departure card")||e.includes("customs")||e.includes("itinerary")||e.includes("insurance")||e.includes("booking")||e.includes("confirmation")){return`<svg viewBox="0 0 80 80" width="70" height="50"><rect x="18" y="14" width="44" height="54" rx="4" fill="${c}" opacity=".15" stroke="${c}" stroke-width="1.5"/><line x1="26" y1="28" x2="54" y2="28" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/><line x1="26" y1="37" x2="54" y2="37" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/><line x1="26" y1="46" x2="44" y2="46" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/><circle cx="54" cy="54" r="7" fill="${c}" opacity=".3" stroke="${c}" stroke-width="1.5"/><polyline points="50,54 53,57 59,51" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;}
-if(e.includes("credit")){return`<svg viewBox="0 0 80 80" width="70" height="50"><rect x="12" y="24" width="56" height="34" rx="5" fill="${c}" opacity=".2" stroke="${c}" stroke-width="1.5"/><rect x="12" y="32" width="56" height="10" fill="${c}" opacity=".3"/><line x1="20" y1="48" x2="36" y2="48" stroke="${c}" stroke-width="2" stroke-linecap="round"/><circle cx="54" cy="49" r="5" fill="${c}" opacity=".5"/><circle cx="60" cy="49" r="5" fill="${c}" opacity=".3"/></svg>`;}
-if(e.includes("name")||e.includes("id")||e.includes("introduction")){return`<svg viewBox="0 0 80 80" width="70" height="50"><rect x="16" y="24" width="48" height="34" rx="4" fill="${c}" opacity=".15" stroke="${c}" stroke-width="1.5"/><circle cx="30" cy="37" r="8" fill="${c}" opacity=".4"/><line x1="42" y1="34" x2="58" y2="34" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/><line x1="42" y1="41" x2="58" y2="41" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/></svg>`;}
-return`<svg viewBox="0 0 80 80" width="70" height="50"><circle cx="40" cy="35" r="18" fill="${c}" opacity=".2" stroke="${c}" stroke-width="1.5"/><circle cx="40" cy="30" r="7" fill="${c}"/><path d="M22 55 Q40 43 58 55" fill="${c}" opacity=".4" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+let activeGroup='all';
+function setGroup(g,btn){
+  activeGroup=g;
+  document.querySelectorAll('.vc-filter').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  filterCards();
 }
-
-function card(w){
-const ac=ACCENT[w.cat]||"#B4B2A9";
-return`<div class="vcard" data-cat="${w.cat}" data-en="${w.en.toLowerCase()}" data-zh="${w.zh}">
-<div class="vcard-accent" style="background:${ac}"></div>
-<div class="vcard-body">
-<div class="vcard-pic">${makeSVG(w.en,w.cat)}</div>
-<div class="vcard-en">${w.en}</div>
-<div class="vcard-pron">${w.pron}</div>
-<div class="vcard-meaning">${w.meaning}</div>
-<hr class="vcard-divider">
-<div class="vcard-zh">${w.zh}</div>
-<div class="vcard-ex">${w.ex1}</div>
-<div class="vcard-ex">${w.ex2}</div>
-<div class="vcard-practice">
-<div class="vcard-practice-label">✏ Try using this word:</div>
-<div class="vcard-practice-item">1. ${w.p1}</div>
-<div class="vcard-practice-item">2. ${w.p2}</div>
-</div>
-</div>
-</div>`;
+function filterCards(){
+  const q=document.querySelector('.vc-search').value.toLowerCase();
+  let visible=0;
+  document.querySelectorAll('.vcard').forEach(c=>{
+    const gMatch=activeGroup==='all'||c.dataset.group===activeGroup;
+    const tMatch=!q||c.dataset.en.includes(q)||c.dataset.zh.includes(q);
+    const show=gMatch&&tMatch;
+    c.classList.toggle('hidden',!show);
+    if(show)visible++;
+  });
+  document.getElementById('count').textContent='Showing '+visible+' words · Lesson 6: Hotel Check-In & Requests';
 }
-
-const grid=document.getElementById("grid");
-const ft=document.getElementById("ft");
-grid.innerHTML=words.map(card).join("");
-const cards=[...grid.querySelectorAll(".vcard")];
-
-function update(){
-const cat=document.querySelector(".fb.active").dataset.cat;
-const q=document.getElementById("srch").value.toLowerCase();
-let n=0;
-cards.forEach(c=>{
-const mc=cat==="all"||c.dataset.cat===cat;
-const mq=!q||c.dataset.en.includes(q)||c.dataset.zh.includes(q);
-const show=mc&&mq;
-c.classList.toggle("hidden",!show);
-if(show)n++;
-});
-ft.textContent=`Showing ${n} of ${words.length} words`;
-}
-
-document.querySelectorAll(".fb").forEach(b=>b.addEventListener("click",()=>{
-document.querySelectorAll(".fb").forEach(x=>x.classList.remove("active"));
-b.classList.add("active");
-update();
-}));
-document.getElementById("srch").addEventListener("input",update);
-update();
 </script>
